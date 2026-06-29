@@ -2,6 +2,8 @@
 
 Dashboard a konfigurace pro **Home Assistant** s integrací systému **KNX/EIB**. Projekt je určen pro rodinný dům — vizualizace, ovládání a automatizace technických systémů budovy. Do projektu budou postupně přibývat i další systémy (ONVIF kamery, OpenWeatherMap, případně další protokoly).
 
+![Dashboard](themes/screenshot.jpg)
+
 ---
 
 ## Použité technologie
