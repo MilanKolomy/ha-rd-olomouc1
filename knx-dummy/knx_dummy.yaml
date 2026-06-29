@@ -1,0 +1,932 @@
+# KNX Dummy entities — pro testování dashboardu bez KNX integrace
+
+input_boolean:
+  svetlo_obyvak_1:
+    name: "svetlo_obyvak_1"
+    initial: false
+  svetlo_obyvak_2:
+    name: "svetlo_obyvak_2"
+    initial: false
+  svetlo_obyvak_3:
+    name: "svetlo_obyvak_3"
+    initial: false
+  svetlo_obyvak_dim_1:
+    name: "svetlo_obyvak_dim_1"
+    initial: false
+  svetlo_obyvak_dim_2:
+    name: "svetlo_obyvak_dim_2"
+    initial: false
+  svetlo_kuchyn_central:
+    name: "svetlo_kuchyn_central"
+    initial: false
+  svetlo_kuchyn_linka_p:
+    name: "svetlo_kuchyn_linka_p"
+    initial: false
+  svetlo_kuchyn_linka_l:
+    name: "svetlo_kuchyn_linka_l"
+    initial: false
+  svetlo_kuchyn_bar:
+    name: "svetlo_kuchyn_bar"
+    initial: false
+  svetlo_detsky_pokoj_1:
+    name: "svetlo_detsky_pokoj_1"
+    initial: false
+  svetlo_detsky_pokoj_2:
+    name: "svetlo_detsky_pokoj_2"
+    initial: false
+  svetlo_loznice:
+    name: "svetlo_loznice"
+    initial: false
+  svetlo_satna:
+    name: "svetlo_satna"
+    initial: false
+  svetlo_pracovna:
+    name: "svetlo_pracovna"
+    initial: false
+  svetlo_koupelna_2np_strop:
+    name: "svetlo_koupelna_2np_strop"
+    initial: false
+  svetlo_koupelna_2np_zrcadlo:
+    name: "svetlo_koupelna_2np_zrcadlo"
+    initial: false
+  svetlo_koupelna_1np_strop:
+    name: "svetlo_koupelna_1np_strop"
+    initial: false
+  svetlo_koupelna_1np_zrcadlo:
+    name: "svetlo_koupelna_1np_zrcadlo"
+    initial: false
+  svetlo_wc:
+    name: "svetlo_wc"
+    initial: false
+  svetlo_garaz:
+    name: "svetlo_garaz"
+    initial: false
+  svetlo_vchod:
+    name: "svetlo_vchod"
+    initial: false
+  svetlo_vchod_bok:
+    name: "svetlo_vchod_bok"
+    initial: false
+  svetlo_terasa:
+    name: "svetlo_terasa"
+    initial: false
+  svetlo_sklep:
+    name: "svetlo_sklep"
+    initial: false
+  svetlo_schodiste_sklep:
+    name: "svetlo_schodiste_sklep"
+    initial: false
+  svetlo_kotelna:
+    name: "svetlo_kotelna"
+    initial: false
+  svetlo_komora:
+    name: "svetlo_komora"
+    initial: false
+  svetlo_chodba:
+    name: "svetlo_chodba"
+    initial: false
+  svetlo_chodba_patro:
+    name: "svetlo_chodba_patro"
+    initial: false
+  svetlo_balkon:
+    name: "svetlo_balkon"
+    initial: false
+  zasuvka_venku:
+    name: "zasuvka_venku"
+    initial: false
+  svetlo_hala:
+    name: "svetlo_hala"
+    initial: false
+  topeni_komfort_obyvak:
+    name: "topeni_komfort_obyvak"
+    initial: false
+  topeni_standby_obyvak:
+    name: "topeni_standby_obyvak"
+    initial: false
+  topeni_noc_obyvak:
+    name: "topeni_noc_obyvak"
+    initial: false
+  topeni_komfort_dp1:
+    name: "topeni_komfort_dp1"
+    initial: false
+  topeni_standby_dp1:
+    name: "topeni_standby_dp1"
+    initial: false
+  topeni_noc_dp1:
+    name: "topeni_noc_dp1"
+    initial: false
+  topeni_komfort_dp2:
+    name: "topeni_komfort_dp2"
+    initial: false
+  topeni_standby_dp2:
+    name: "topeni_standby_dp2"
+    initial: false
+  topeni_noc_dp2:
+    name: "topeni_noc_dp2"
+    initial: false
+  topeni_komfort_loznice:
+    name: "topeni_komfort_loznice"
+    initial: false
+  topeni_standby_loznice:
+    name: "topeni_standby_loznice"
+    initial: false
+  topeni_noc_loznice:
+    name: "topeni_noc_loznice"
+    initial: false
+  topeni_komfort_pracovna:
+    name: "topeni_komfort_pracovna"
+    initial: false
+  topeni_standby_pracovna:
+    name: "topeni_standby_pracovna"
+    initial: false
+  topeni_noc_pracovna:
+    name: "topeni_noc_pracovna"
+    initial: false
+  topeni_komfort_koupelna_2np:
+    name: "topeni_komfort_koupelna_2np"
+    initial: false
+  topeni_standby_koupelna_2np:
+    name: "topeni_standby_koupelna_2np"
+    initial: false
+  topeni_noc_koupelna_2np:
+    name: "topeni_noc_koupelna_2np"
+    initial: false
+  rezim_topeni_dp1:
+    name: "rezim_topeni_dp1"
+    initial: false
+  rezim_topeni_dp2:
+    name: "rezim_topeni_dp2"
+    initial: false
+  rezim_topeni_pracovna:
+    name: "rezim_topeni_pracovna"
+    initial: false
+  rezim_topeni_loznice:
+    name: "rezim_topeni_loznice"
+    initial: false
+  ventilace_sklep:
+    name: "ventilace_sklep"
+    initial: false
+  ventilace_koupelna_1np:
+    name: "ventilace_koupelna_1np"
+    initial: false
+  okno_obyvak:
+    name: "okno_obyvak"
+    initial: false
+  okno_kuchyn:
+    name: "okno_kuchyn"
+    initial: false
+  okno_dp1_a:
+    name: "okno_dp1_a"
+    initial: false
+  okno_dp1_b:
+    name: "okno_dp1_b"
+    initial: false
+  okno_dp2:
+    name: "okno_dp2"
+    initial: false
+  okno_loznice:
+    name: "okno_loznice"
+    initial: false
+  okno_pracovna:
+    name: "okno_pracovna"
+    initial: false
+  okno_terasa:
+    name: "okno_terasa"
+    initial: false
+  okno_garaz:
+    name: "okno_garaz"
+    initial: false
+  okno_kotelna:
+    name: "okno_kotelna"
+    initial: false
+  dvere_terasa:
+    name: "dvere_terasa"
+    initial: false
+  dvere_vstup:
+    name: "dvere_vstup"
+    initial: false
+  vrata_garaz_kontakt:
+    name: "vrata_garaz_kontakt"
+    initial: false
+
+template:
+  - light:
+      - name: "svetlo_obyvak_1"
+        unique_id: dummy_svetlo_obyvak_1
+        state: "{{ is_state('input_boolean.svetlo_obyvak_1', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_obyvak_1
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_obyvak_1
+      - name: "svetlo_obyvak_2"
+        unique_id: dummy_svetlo_obyvak_2
+        state: "{{ is_state('input_boolean.svetlo_obyvak_2', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_obyvak_2
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_obyvak_2
+      - name: "svetlo_obyvak_3"
+        unique_id: dummy_svetlo_obyvak_3
+        state: "{{ is_state('input_boolean.svetlo_obyvak_3', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_obyvak_3
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_obyvak_3
+      - name: "svetlo_obyvak_dim_1"
+        unique_id: dummy_svetlo_obyvak_dim_1
+        state: "{{ is_state('input_boolean.svetlo_obyvak_dim_1', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_obyvak_dim_1
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_obyvak_dim_1
+      - name: "svetlo_obyvak_dim_2"
+        unique_id: dummy_svetlo_obyvak_dim_2
+        state: "{{ is_state('input_boolean.svetlo_obyvak_dim_2', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_obyvak_dim_2
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_obyvak_dim_2
+      - name: "svetlo_kuchyn_central"
+        unique_id: dummy_svetlo_kuchyn_central
+        state: "{{ is_state('input_boolean.svetlo_kuchyn_central', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_kuchyn_central
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_kuchyn_central
+      - name: "svetlo_kuchyn_linka_p"
+        unique_id: dummy_svetlo_kuchyn_linka_p
+        state: "{{ is_state('input_boolean.svetlo_kuchyn_linka_p', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_kuchyn_linka_p
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_kuchyn_linka_p
+      - name: "svetlo_kuchyn_linka_l"
+        unique_id: dummy_svetlo_kuchyn_linka_l
+        state: "{{ is_state('input_boolean.svetlo_kuchyn_linka_l', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_kuchyn_linka_l
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_kuchyn_linka_l
+      - name: "svetlo_kuchyn_bar"
+        unique_id: dummy_svetlo_kuchyn_bar
+        state: "{{ is_state('input_boolean.svetlo_kuchyn_bar', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_kuchyn_bar
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_kuchyn_bar
+      - name: "svetlo_detsky_pokoj_1"
+        unique_id: dummy_svetlo_detsky_pokoj_1
+        state: "{{ is_state('input_boolean.svetlo_detsky_pokoj_1', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_detsky_pokoj_1
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_detsky_pokoj_1
+      - name: "svetlo_detsky_pokoj_2"
+        unique_id: dummy_svetlo_detsky_pokoj_2
+        state: "{{ is_state('input_boolean.svetlo_detsky_pokoj_2', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_detsky_pokoj_2
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_detsky_pokoj_2
+      - name: "svetlo_loznice"
+        unique_id: dummy_svetlo_loznice
+        state: "{{ is_state('input_boolean.svetlo_loznice', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_loznice
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_loznice
+      - name: "svetlo_satna"
+        unique_id: dummy_svetlo_satna
+        state: "{{ is_state('input_boolean.svetlo_satna', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_satna
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_satna
+      - name: "svetlo_pracovna"
+        unique_id: dummy_svetlo_pracovna
+        state: "{{ is_state('input_boolean.svetlo_pracovna', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_pracovna
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_pracovna
+      - name: "svetlo_koupelna_2np_strop"
+        unique_id: dummy_svetlo_koupelna_2np_strop
+        state: "{{ is_state('input_boolean.svetlo_koupelna_2np_strop', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_koupelna_2np_strop
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_koupelna_2np_strop
+      - name: "svetlo_koupelna_2np_zrcadlo"
+        unique_id: dummy_svetlo_koupelna_2np_zrcadlo
+        state: "{{ is_state('input_boolean.svetlo_koupelna_2np_zrcadlo', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_koupelna_2np_zrcadlo
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_koupelna_2np_zrcadlo
+      - name: "svetlo_koupelna_1np_strop"
+        unique_id: dummy_svetlo_koupelna_1np_strop
+        state: "{{ is_state('input_boolean.svetlo_koupelna_1np_strop', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_koupelna_1np_strop
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_koupelna_1np_strop
+      - name: "svetlo_koupelna_1np_zrcadlo"
+        unique_id: dummy_svetlo_koupelna_1np_zrcadlo
+        state: "{{ is_state('input_boolean.svetlo_koupelna_1np_zrcadlo', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_koupelna_1np_zrcadlo
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_koupelna_1np_zrcadlo
+      - name: "svetlo_wc"
+        unique_id: dummy_svetlo_wc
+        state: "{{ is_state('input_boolean.svetlo_wc', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_wc
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_wc
+      - name: "svetlo_garaz"
+        unique_id: dummy_svetlo_garaz
+        state: "{{ is_state('input_boolean.svetlo_garaz', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_garaz
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_garaz
+      - name: "svetlo_vchod"
+        unique_id: dummy_svetlo_vchod
+        state: "{{ is_state('input_boolean.svetlo_vchod', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_vchod
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_vchod
+      - name: "svetlo_vchod_bok"
+        unique_id: dummy_svetlo_vchod_bok
+        state: "{{ is_state('input_boolean.svetlo_vchod_bok', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_vchod_bok
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_vchod_bok
+      - name: "svetlo_terasa"
+        unique_id: dummy_svetlo_terasa
+        state: "{{ is_state('input_boolean.svetlo_terasa', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_terasa
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_terasa
+      - name: "svetlo_sklep"
+        unique_id: dummy_svetlo_sklep
+        state: "{{ is_state('input_boolean.svetlo_sklep', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_sklep
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_sklep
+      - name: "svetlo_schodiste_sklep"
+        unique_id: dummy_svetlo_schodiste_sklep
+        state: "{{ is_state('input_boolean.svetlo_schodiste_sklep', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_schodiste_sklep
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_schodiste_sklep
+      - name: "svetlo_kotelna"
+        unique_id: dummy_svetlo_kotelna
+        state: "{{ is_state('input_boolean.svetlo_kotelna', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_kotelna
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_kotelna
+      - name: "svetlo_komora"
+        unique_id: dummy_svetlo_komora
+        state: "{{ is_state('input_boolean.svetlo_komora', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_komora
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_komora
+      - name: "svetlo_chodba"
+        unique_id: dummy_svetlo_chodba
+        state: "{{ is_state('input_boolean.svetlo_chodba', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_chodba
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_chodba
+      - name: "svetlo_chodba_patro"
+        unique_id: dummy_svetlo_chodba_patro
+        state: "{{ is_state('input_boolean.svetlo_chodba_patro', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_chodba_patro
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_chodba_patro
+      - name: "svetlo_balkon"
+        unique_id: dummy_svetlo_balkon
+        state: "{{ is_state('input_boolean.svetlo_balkon', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_balkon
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_balkon
+      - name: "zasuvka_venku"
+        unique_id: dummy_zasuvka_venku
+        state: "{{ is_state('input_boolean.zasuvka_venku', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.zasuvka_venku
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.zasuvka_venku
+      - name: "svetlo_hala"
+        unique_id: dummy_svetlo_hala
+        state: "{{ is_state('input_boolean.svetlo_hala', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.svetlo_hala
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.svetlo_hala
+  - switch:
+      - name: "topeni_komfort_obyvak"
+        unique_id: dummy_topeni_komfort_obyvak
+        state: "{{ is_state('input_boolean.topeni_komfort_obyvak', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_komfort_obyvak
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_komfort_obyvak
+      - name: "topeni_standby_obyvak"
+        unique_id: dummy_topeni_standby_obyvak
+        state: "{{ is_state('input_boolean.topeni_standby_obyvak', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_standby_obyvak
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_standby_obyvak
+      - name: "topeni_noc_obyvak"
+        unique_id: dummy_topeni_noc_obyvak
+        state: "{{ is_state('input_boolean.topeni_noc_obyvak', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_noc_obyvak
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_noc_obyvak
+      - name: "topeni_komfort_dp1"
+        unique_id: dummy_topeni_komfort_dp1
+        state: "{{ is_state('input_boolean.topeni_komfort_dp1', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_komfort_dp1
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_komfort_dp1
+      - name: "topeni_standby_dp1"
+        unique_id: dummy_topeni_standby_dp1
+        state: "{{ is_state('input_boolean.topeni_standby_dp1', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_standby_dp1
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_standby_dp1
+      - name: "topeni_noc_dp1"
+        unique_id: dummy_topeni_noc_dp1
+        state: "{{ is_state('input_boolean.topeni_noc_dp1', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_noc_dp1
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_noc_dp1
+      - name: "topeni_komfort_dp2"
+        unique_id: dummy_topeni_komfort_dp2
+        state: "{{ is_state('input_boolean.topeni_komfort_dp2', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_komfort_dp2
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_komfort_dp2
+      - name: "topeni_standby_dp2"
+        unique_id: dummy_topeni_standby_dp2
+        state: "{{ is_state('input_boolean.topeni_standby_dp2', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_standby_dp2
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_standby_dp2
+      - name: "topeni_noc_dp2"
+        unique_id: dummy_topeni_noc_dp2
+        state: "{{ is_state('input_boolean.topeni_noc_dp2', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_noc_dp2
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_noc_dp2
+      - name: "topeni_komfort_loznice"
+        unique_id: dummy_topeni_komfort_loznice
+        state: "{{ is_state('input_boolean.topeni_komfort_loznice', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_komfort_loznice
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_komfort_loznice
+      - name: "topeni_standby_loznice"
+        unique_id: dummy_topeni_standby_loznice
+        state: "{{ is_state('input_boolean.topeni_standby_loznice', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_standby_loznice
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_standby_loznice
+      - name: "topeni_noc_loznice"
+        unique_id: dummy_topeni_noc_loznice
+        state: "{{ is_state('input_boolean.topeni_noc_loznice', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_noc_loznice
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_noc_loznice
+      - name: "topeni_komfort_pracovna"
+        unique_id: dummy_topeni_komfort_pracovna
+        state: "{{ is_state('input_boolean.topeni_komfort_pracovna', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_komfort_pracovna
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_komfort_pracovna
+      - name: "topeni_standby_pracovna"
+        unique_id: dummy_topeni_standby_pracovna
+        state: "{{ is_state('input_boolean.topeni_standby_pracovna', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_standby_pracovna
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_standby_pracovna
+      - name: "topeni_noc_pracovna"
+        unique_id: dummy_topeni_noc_pracovna
+        state: "{{ is_state('input_boolean.topeni_noc_pracovna', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_noc_pracovna
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_noc_pracovna
+      - name: "topeni_komfort_koupelna_2np"
+        unique_id: dummy_topeni_komfort_koupelna_2np
+        state: "{{ is_state('input_boolean.topeni_komfort_koupelna_2np', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_komfort_koupelna_2np
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_komfort_koupelna_2np
+      - name: "topeni_standby_koupelna_2np"
+        unique_id: dummy_topeni_standby_koupelna_2np
+        state: "{{ is_state('input_boolean.topeni_standby_koupelna_2np', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_standby_koupelna_2np
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_standby_koupelna_2np
+      - name: "topeni_noc_koupelna_2np"
+        unique_id: dummy_topeni_noc_koupelna_2np
+        state: "{{ is_state('input_boolean.topeni_noc_koupelna_2np', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.topeni_noc_koupelna_2np
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.topeni_noc_koupelna_2np
+      - name: "rezim_topeni_dp1"
+        unique_id: dummy_rezim_topeni_dp1
+        state: "{{ is_state('input_boolean.rezim_topeni_dp1', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.rezim_topeni_dp1
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.rezim_topeni_dp1
+      - name: "rezim_topeni_dp2"
+        unique_id: dummy_rezim_topeni_dp2
+        state: "{{ is_state('input_boolean.rezim_topeni_dp2', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.rezim_topeni_dp2
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.rezim_topeni_dp2
+      - name: "rezim_topeni_pracovna"
+        unique_id: dummy_rezim_topeni_pracovna
+        state: "{{ is_state('input_boolean.rezim_topeni_pracovna', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.rezim_topeni_pracovna
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.rezim_topeni_pracovna
+      - name: "rezim_topeni_loznice"
+        unique_id: dummy_rezim_topeni_loznice
+        state: "{{ is_state('input_boolean.rezim_topeni_loznice', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.rezim_topeni_loznice
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.rezim_topeni_loznice
+      - name: "ventilace_sklep"
+        unique_id: dummy_ventilace_sklep
+        state: "{{ is_state('input_boolean.ventilace_sklep', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.ventilace_sklep
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.ventilace_sklep
+      - name: "ventilace_koupelna_1np"
+        unique_id: dummy_ventilace_koupelna_1np
+        state: "{{ is_state('input_boolean.ventilace_koupelna_1np', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.ventilace_koupelna_1np
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.ventilace_koupelna_1np
+  - sensor:
+      - name: "teplota_obyvak"
+        unique_id: dummy_teplota_obyvak
+        state: "21.5"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+      - name: "teplota_detsky_pokoj_1"
+        unique_id: dummy_teplota_detsky_pokoj_1
+        state: "20.8"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+      - name: "teplota_detsky_pokoj_2"
+        unique_id: dummy_teplota_detsky_pokoj_2
+        state: "21.2"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+      - name: "teplota_loznice"
+        unique_id: dummy_teplota_loznice
+        state: "19.5"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+      - name: "teplota_pracovna"
+        unique_id: dummy_teplota_pracovna
+        state: "22.0"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+      - name: "teplota_koupelna_2np"
+        unique_id: dummy_teplota_koupelna_2np
+        state: "23.5"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+      - name: "teplota_venku"
+        unique_id: dummy_teplota_venku
+        state: "12.3"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+      - name: "teplota_sklep"
+        unique_id: dummy_teplota_sklep
+        state: "16.8"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+  - binary_sensor:
+      - name: "okno_obyvak"
+        unique_id: dummy_okno_obyvak
+        state: "{{ is_state('input_boolean.okno_obyvak', 'on') }}"
+        device_class: window
+      - name: "okno_kuchyn"
+        unique_id: dummy_okno_kuchyn
+        state: "{{ is_state('input_boolean.okno_kuchyn', 'on') }}"
+        device_class: window
+      - name: "okno_dp1_a"
+        unique_id: dummy_okno_dp1_a
+        state: "{{ is_state('input_boolean.okno_dp1_a', 'on') }}"
+        device_class: window
+      - name: "okno_dp1_b"
+        unique_id: dummy_okno_dp1_b
+        state: "{{ is_state('input_boolean.okno_dp1_b', 'on') }}"
+        device_class: window
+      - name: "okno_dp2"
+        unique_id: dummy_okno_dp2
+        state: "{{ is_state('input_boolean.okno_dp2', 'on') }}"
+        device_class: window
+      - name: "okno_loznice"
+        unique_id: dummy_okno_loznice
+        state: "{{ is_state('input_boolean.okno_loznice', 'on') }}"
+        device_class: window
+      - name: "okno_pracovna"
+        unique_id: dummy_okno_pracovna
+        state: "{{ is_state('input_boolean.okno_pracovna', 'on') }}"
+        device_class: window
+      - name: "okno_terasa"
+        unique_id: dummy_okno_terasa
+        state: "{{ is_state('input_boolean.okno_terasa', 'on') }}"
+        device_class: window
+      - name: "okno_garaz"
+        unique_id: dummy_okno_garaz
+        state: "{{ is_state('input_boolean.okno_garaz', 'on') }}"
+        device_class: window
+      - name: "okno_kotelna"
+        unique_id: dummy_okno_kotelna
+        state: "{{ is_state('input_boolean.okno_kotelna', 'on') }}"
+        device_class: window
+      - name: "dvere_terasa"
+        unique_id: dummy_dvere_terasa
+        state: "{{ is_state('input_boolean.dvere_terasa', 'on') }}"
+        device_class: door
+      - name: "dvere_vstup"
+        unique_id: dummy_dvere_vstup
+        state: "{{ is_state('input_boolean.dvere_vstup', 'on') }}"
+        device_class: door
+      - name: "vrata_garaz_kontakt"
+        unique_id: dummy_vrata_garaz_kontakt
+        state: "{{ is_state('input_boolean.vrata_garaz_kontakt', 'on') }}"
+        device_class: garage_door

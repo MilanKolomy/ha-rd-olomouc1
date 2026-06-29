@@ -1,0 +1,371 @@
+# KNX Entity Configuration
+# Tento soubor patří do configuration.yaml jako: knx: !include knx-config/knx.yaml
+# KNX/IP Router - autodiscovery (přidat KNX integraci přes UI: Nastavení → Integrace → KNX)
+
+# ============================================================
+# SVĚTLA (switch binary 1-bit, group 3/1/x)
+# ============================================================
+light:
+  # --- Sklep / Přízemí ---
+  - name: "Svetlo Schodiste Sklep"
+    address: "3/1/2"
+    state_address: "3/1/2"
+
+  - name: "Svetlo Sklep"
+    address: "3/1/3"
+    state_address: "3/1/3"
+
+  - name: "Svetlo Hala"
+    address: "3/1/5"
+    state_address: "3/1/5"
+
+  - name: "Svetlo Chodba"
+    address: "3/1/6"
+    state_address: "3/1/6"
+
+  - name: "Svetlo Kuchyn Central"
+    address: "3/1/7"
+    state_address: "3/1/7"
+
+  - name: "Svetlo Kuchyn Linka P"
+    address: "3/1/8"
+    state_address: "3/1/8"
+
+  - name: "Svetlo Kuchyn Linka L"
+    address: "3/1/9"
+    state_address: "3/1/9"
+
+  - name: "Svetlo Kuchyn Bar"
+    address: "3/1/10"
+    state_address: "3/1/10"
+
+  - name: "Svetlo Komora"
+    address: "3/1/11"
+    state_address: "3/1/11"
+
+  - name: "Svetlo Kotelna"
+    address: "3/1/12"
+    state_address: "3/1/12"
+
+  - name: "Svetlo Koupelna 1NP Strop"
+    address: "3/1/13"
+    state_address: "3/1/13"
+
+  - name: "Svetlo Koupelna 1NP Zrcadlo"
+    address: "3/1/14"
+    state_address: "3/1/14"
+
+  - name: "Svetlo Garaz"
+    address: "3/1/15"
+    state_address: "3/1/15"
+
+  - name: "Svetlo Vchod"
+    address: "3/1/16"
+    state_address: "3/1/16"
+
+  - name: "Svetlo Vchod Bok"
+    address: "3/1/17"
+    state_address: "3/1/17"
+
+  - name: "Svetlo Terasa"
+    address: "3/1/18"
+    state_address: "3/1/18"
+
+  # --- 2NP ---
+  - name: "Svetlo Detsky Pokoj 1"
+    address: "3/1/19"
+    state_address: "3/1/19"
+
+  - name: "Svetlo Detsky Pokoj 2"
+    address: "3/1/20"
+    state_address: "3/1/20"
+
+  - name: "Svetlo Balkon"
+    address: "3/1/21"
+    state_address: "3/1/21"
+
+  - name: "Svetlo WC"
+    address: "3/1/22"
+    state_address: "3/1/22"
+
+  - name: "Svetlo Chodba Patro"
+    address: "3/1/23"
+    state_address: "3/1/23"
+
+  - name: "Svetlo Loznice"
+    address: "3/1/24"
+    state_address: "3/1/24"
+
+  - name: "Svetlo Satna"
+    address: "3/1/25"
+    state_address: "3/1/25"
+
+  - name: "Svetlo Pracovna"
+    address: "3/1/26"
+    state_address: "3/1/26"
+
+  - name: "Svetlo Koupelna 2NP Strop"
+    address: "3/1/27"
+    state_address: "3/1/27"
+
+  - name: "Svetlo Koupelna 2NP Zrcadlo"
+    address: "3/1/28"
+    state_address: "3/1/28"
+
+  - name: "Svetlo Obyvak 1"
+    address: "3/1/29"
+    state_address: "3/1/29"
+
+  - name: "Svetlo Obyvak 2"
+    address: "3/1/30"
+    state_address: "3/1/30"
+
+  - name: "Svetlo Obyvak 3"
+    address: "3/1/31"
+    state_address: "3/1/31"
+
+  - name: "Zasuvka Venku"
+    address: "3/1/32"
+    state_address: "3/1/32"
+
+  # --- Stmívací světla - Obývací pokoj (3/2/x) ---
+  - name: "Svetlo Obyvak Dim 1"
+    address: "3/2/0"
+    state_address: "3/2/0"
+    brightness_address: "3/2/2"
+    brightness_state_address: "3/2/2"
+
+  - name: "Svetlo Obyvak Dim 2"
+    address: "3/2/1"
+    state_address: "3/2/1"
+    brightness_address: "3/2/3"
+    brightness_state_address: "3/2/3"
+
+# ============================================================
+# TEPLOTNÍ SENZORY (4/0/x)
+# ============================================================
+sensor:
+  - name: "Teplota Obyvak"
+    state_address: "4/0/6"
+    type: temperature
+
+  - name: "Teplota Detsky Pokoj 1"
+    state_address: "4/0/7"
+    type: temperature
+
+  - name: "Teplota Detsky Pokoj 2"
+    state_address: "4/0/2"
+    type: temperature
+
+  - name: "Teplota Loznice"
+    state_address: "4/0/3"
+    type: temperature
+
+  - name: "Teplota Pracovna"
+    state_address: "4/0/4"
+    type: temperature
+
+  - name: "Teplota Koupelna 2NP"
+    state_address: "4/0/5"
+    type: temperature
+
+# ============================================================
+# TOPENÍ - REŽIMY (switch, 1-bit)
+# Komfort = 4/1/x, Standby = 4/2/x, Noc/Útlum = 4/3/x
+# ============================================================
+switch:
+  # Komfort
+  - name: "Topeni Komfort Obyvak"
+    address: "4/1/0"
+    state_address: "4/1/0"
+
+  - name: "Topeni Komfort DP1"
+    address: "4/1/1"
+    state_address: "4/1/1"
+
+  - name: "Topeni Komfort DP2"
+    address: "4/1/2"
+    state_address: "4/1/2"
+
+  - name: "Topeni Komfort Loznice"
+    address: "4/1/3"
+    state_address: "4/1/3"
+
+  - name: "Topeni Komfort Pracovna"
+    address: "4/1/4"
+    state_address: "4/1/4"
+
+  - name: "Topeni Komfort Koupelna 2NP"
+    address: "4/1/5"
+    state_address: "4/1/5"
+
+  # Standby
+  - name: "Topeni Standby Obyvak"
+    address: "4/2/0"
+    state_address: "4/2/0"
+
+  - name: "Topeni Standby DP1"
+    address: "4/2/1"
+    state_address: "4/2/1"
+
+  - name: "Topeni Standby DP2"
+    address: "4/2/2"
+    state_address: "4/2/2"
+
+  - name: "Topeni Standby Loznice"
+    address: "4/2/3"
+    state_address: "4/2/3"
+
+  - name: "Topeni Standby Pracovna"
+    address: "4/2/4"
+    state_address: "4/2/4"
+
+  - name: "Topeni Standby Koupelna 2NP"
+    address: "4/2/5"
+    state_address: "4/2/5"
+
+  # Noc / Útlum
+  - name: "Topeni Noc Obyvak"
+    address: "4/3/0"
+    state_address: "4/3/0"
+
+  - name: "Topeni Noc DP1"
+    address: "4/3/1"
+    state_address: "4/3/1"
+
+  - name: "Topeni Noc DP2"
+    address: "4/3/2"
+    state_address: "4/3/2"
+
+  - name: "Topeni Noc Loznice"
+    address: "4/3/3"
+    state_address: "4/3/3"
+
+  - name: "Topeni Noc Pracovna"
+    address: "4/3/4"
+    state_address: "4/3/4"
+
+  - name: "Topeni Noc Koupelna 2NP"
+    address: "4/3/5"
+    state_address: "4/3/5"
+
+  # Topení / Klimatizace přepínač (1=Topení, 0=Klima)
+  - name: "Rezim Topeni DP1"
+    address: "4/5/0"
+    state_address: "4/5/0"
+
+  - name: "Rezim Topeni DP2"
+    address: "4/5/2"
+    state_address: "4/5/2"
+
+  - name: "Rezim Topeni Pracovna"
+    address: "4/5/4"
+    state_address: "4/5/4"
+
+  - name: "Rezim Topeni Loznice"
+    address: "4/5/6"
+    state_address: "4/5/6"
+
+  # Ventilace (switch)
+  - name: "Ventilace Sklep"
+    address: "3/3/1"
+    state_address: "3/3/1"
+
+  - name: "Ventilace Koupelna 1NP"
+    address: "3/3/0"
+    state_address: "3/3/0"
+
+# ============================================================
+# KONTAKTY OKEN A DVEŘÍ (binary sensor, 2/1/x)
+# ============================================================
+binary_sensor:
+  - name: "Vrata Garaz Kontakt"
+    state_address: "2/1/0"
+    device_class: garage_door
+    sync_state: false
+
+  - name: "Dvere Vstup"
+    state_address: "2/1/1"
+    device_class: door
+    sync_state: false
+
+  - name: "Okno Garaz"
+    state_address: "2/1/2"
+    device_class: window
+    sync_state: false
+
+  - name: "Okno Kotelna"
+    state_address: "2/1/3"
+    device_class: window
+    sync_state: false
+
+  - name: "Okno Terasa"
+    state_address: "2/1/4"
+    device_class: window
+    sync_state: false
+
+  - name: "Dvere Terasa"
+    state_address: "2/1/5"
+    device_class: door
+    sync_state: false
+
+  - name: "Okno Obyvak"
+    state_address: "2/1/6"
+    device_class: window
+    sync_state: false
+
+  - name: "Okno Kuchyn"
+    state_address: "2/1/7"
+    device_class: window
+    sync_state: false
+
+  - name: "Okno DP1 A"
+    state_address: "2/1/8"
+    device_class: window
+    sync_state: false
+
+  - name: "Okno DP2"
+    state_address: "2/1/9"
+    device_class: window
+    sync_state: false
+
+  - name: "Dvere Balkon"
+    state_address: "2/1/10"
+    device_class: door
+    sync_state: false
+
+  - name: "Okno DP1 B"
+    state_address: "2/1/11"
+    device_class: window
+    sync_state: false
+
+  - name: "Okno WC"
+    state_address: "2/1/12"
+    device_class: window
+    sync_state: false
+
+  - name: "Dvere Koupelna 2NP"
+    state_address: "2/1/13"
+    device_class: door
+    sync_state: false
+
+  - name: "Okno Pracovna"
+    state_address: "2/1/14"
+    device_class: window
+    sync_state: false
+
+  - name: "Okno Loznice"
+    state_address: "2/1/16"
+    device_class: window
+    sync_state: false
+
+# ============================================================
+# VRATA / BRÁNA (button/cover)
+# Pro ovládání vrat/brány použijeme button entity (impulz)
+# ============================================================
+button:
+  - name: "Ovladani Brana Vjezd"
+    address: "2/3/2"
+
+  - name: "Ovladani Vrata Garaz"
+    address: "2/3/1"

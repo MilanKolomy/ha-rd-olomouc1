@@ -1,0 +1,585 @@
+input_select:
+  topeni_rezim_obyvak:
+    name: "Obývací pokoj"
+    options: [Komfort, Standby, Útlum]
+    initial: Útlum
+    icon: mdi:sofa
+  topeni_rezim_dp1:
+    name: "Dětský pokoj 1"
+    options: [Komfort, Standby, Útlum]
+    initial: Útlum
+    icon: mdi:bed
+  topeni_rezim_dp2:
+    name: "Dětský pokoj 2"
+    options: [Komfort, Standby, Útlum]
+    initial: Útlum
+    icon: mdi:bed
+  topeni_rezim_loznice:
+    name: "Ložnice"
+    options: [Komfort, Standby, Útlum]
+    initial: Útlum
+    icon: mdi:bed-king
+  topeni_rezim_pracovna:
+    name: "Pracovna"
+    options: [Komfort, Standby, Útlum]
+    initial: Útlum
+    icon: mdi:desk-lamp
+  topeni_rezim_koupelna_2np:
+    name: "Koupelna 2NP"
+    options: [Komfort, Standby, Útlum]
+    initial: Útlum
+    icon: mdi:shower
+
+automation:
+
+  # ── PŘEPÍNAČ: input_select → spínače ───────────────────────────────────────
+
+  - id: topeni_sel_obyvak_changed
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_rezim_obyvak
+    action:
+      choose:
+        - conditions: "{{ trigger.to_state.state == 'Komfort' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_komfort_obyvak}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_standby_obyvak, switch.topeni_noc_obyvak]}
+        - conditions: "{{ trigger.to_state.state == 'Standby' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_standby_obyvak}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_obyvak, switch.topeni_noc_obyvak]}
+        - conditions: "{{ trigger.to_state.state == 'Útlum' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_noc_obyvak}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_obyvak, switch.topeni_standby_obyvak]}
+
+  - id: topeni_sel_dp1_changed
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_rezim_dp1
+    action:
+      choose:
+        - conditions: "{{ trigger.to_state.state == 'Komfort' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_komfort_dp1}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_standby_dp1, switch.topeni_noc_dp1]}
+        - conditions: "{{ trigger.to_state.state == 'Standby' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_standby_dp1}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_dp1, switch.topeni_noc_dp1]}
+        - conditions: "{{ trigger.to_state.state == 'Útlum' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_noc_dp1}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_dp1, switch.topeni_standby_dp1]}
+
+  - id: topeni_sel_dp2_changed
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_rezim_dp2
+    action:
+      choose:
+        - conditions: "{{ trigger.to_state.state == 'Komfort' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_komfort_dp2}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_standby_dp2, switch.topeni_noc_dp2]}
+        - conditions: "{{ trigger.to_state.state == 'Standby' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_standby_dp2}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_dp2, switch.topeni_noc_dp2]}
+        - conditions: "{{ trigger.to_state.state == 'Útlum' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_noc_dp2}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_dp2, switch.topeni_standby_dp2]}
+
+  - id: topeni_sel_loznice_changed
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_rezim_loznice
+    action:
+      choose:
+        - conditions: "{{ trigger.to_state.state == 'Komfort' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_komfort_loznice}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_standby_loznice, switch.topeni_noc_loznice]}
+        - conditions: "{{ trigger.to_state.state == 'Standby' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_standby_loznice}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_loznice, switch.topeni_noc_loznice]}
+        - conditions: "{{ trigger.to_state.state == 'Útlum' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_noc_loznice}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_loznice, switch.topeni_standby_loznice]}
+
+  - id: topeni_sel_pracovna_changed
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_rezim_pracovna
+    action:
+      choose:
+        - conditions: "{{ trigger.to_state.state == 'Komfort' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_komfort_pracovna}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_standby_pracovna, switch.topeni_noc_pracovna]}
+        - conditions: "{{ trigger.to_state.state == 'Standby' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_standby_pracovna}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_pracovna, switch.topeni_noc_pracovna]}
+        - conditions: "{{ trigger.to_state.state == 'Útlum' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_noc_pracovna}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_pracovna, switch.topeni_standby_pracovna]}
+
+  - id: topeni_sel_koupelna2np_changed
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_rezim_koupelna_2np
+    action:
+      choose:
+        - conditions: "{{ trigger.to_state.state == 'Komfort' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_komfort_koupelna_2np}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_standby_koupelna_2np, switch.topeni_noc_koupelna_2np]}
+        - conditions: "{{ trigger.to_state.state == 'Standby' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_standby_koupelna_2np}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_koupelna_2np, switch.topeni_noc_koupelna_2np]}
+        - conditions: "{{ trigger.to_state.state == 'Útlum' }}"
+          sequence:
+            - service: switch.turn_on
+              target: {entity_id: switch.topeni_noc_koupelna_2np}
+            - service: switch.turn_off
+              target: {entity_id: [switch.topeni_komfort_koupelna_2np, switch.topeni_standby_koupelna_2np]}
+
+  # ── ZPĚTNÁ SYNC: spínač ON → input_select ──────────────────────────────────
+
+  - id: topeni_switch_obyvak_sync
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_obyvak
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_standby_obyvak
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_noc_obyvak
+        to: 'on'
+    action:
+      service: input_select.select_option
+      target: {entity_id: input_select.topeni_rezim_obyvak}
+      data:
+        option: >
+          {% if trigger.entity_id == 'switch.topeni_komfort_obyvak' %}Komfort
+          {% elif trigger.entity_id == 'switch.topeni_standby_obyvak' %}Standby
+          {% else %}Útlum{% endif %}
+
+  - id: topeni_switch_dp1_sync
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_dp1
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_standby_dp1
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_noc_dp1
+        to: 'on'
+    action:
+      service: input_select.select_option
+      target: {entity_id: input_select.topeni_rezim_dp1}
+      data:
+        option: >
+          {% if trigger.entity_id == 'switch.topeni_komfort_dp1' %}Komfort
+          {% elif trigger.entity_id == 'switch.topeni_standby_dp1' %}Standby
+          {% else %}Útlum{% endif %}
+
+  - id: topeni_switch_dp2_sync
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_dp2
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_standby_dp2
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_noc_dp2
+        to: 'on'
+    action:
+      service: input_select.select_option
+      target: {entity_id: input_select.topeni_rezim_dp2}
+      data:
+        option: >
+          {% if trigger.entity_id == 'switch.topeni_komfort_dp2' %}Komfort
+          {% elif trigger.entity_id == 'switch.topeni_standby_dp2' %}Standby
+          {% else %}Útlum{% endif %}
+
+  - id: topeni_switch_loznice_sync
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_loznice
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_standby_loznice
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_noc_loznice
+        to: 'on'
+    action:
+      service: input_select.select_option
+      target: {entity_id: input_select.topeni_rezim_loznice}
+      data:
+        option: >
+          {% if trigger.entity_id == 'switch.topeni_komfort_loznice' %}Komfort
+          {% elif trigger.entity_id == 'switch.topeni_standby_loznice' %}Standby
+          {% else %}Útlum{% endif %}
+
+  - id: topeni_switch_pracovna_sync
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_pracovna
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_standby_pracovna
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_noc_pracovna
+        to: 'on'
+    action:
+      service: input_select.select_option
+      target: {entity_id: input_select.topeni_rezim_pracovna}
+      data:
+        option: >
+          {% if trigger.entity_id == 'switch.topeni_komfort_pracovna' %}Komfort
+          {% elif trigger.entity_id == 'switch.topeni_standby_pracovna' %}Standby
+          {% else %}Útlum{% endif %}
+
+  - id: topeni_switch_koupelna2np_sync
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_koupelna_2np
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_standby_koupelna_2np
+        to: 'on'
+      - platform: state
+        entity_id: switch.topeni_noc_koupelna_2np
+        to: 'on'
+    action:
+      service: input_select.select_option
+      target: {entity_id: input_select.topeni_rezim_koupelna_2np}
+      data:
+        option: >
+          {% if trigger.entity_id == 'switch.topeni_komfort_koupelna_2np' %}Komfort
+          {% elif trigger.entity_id == 'switch.topeni_standby_koupelna_2np' %}Standby
+          {% else %}Útlum{% endif %}
+
+  # ── EXKLUZIVITA: spínač ON → ostatní OFF ───────────────────────────────────
+
+  - id: topeni_obyvak_komfort_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_obyvak
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_standby_obyvak, switch.topeni_noc_obyvak]
+
+  - id: topeni_obyvak_standby_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_standby_obyvak
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_obyvak, switch.topeni_noc_obyvak]
+
+  - id: topeni_obyvak_noc_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_noc_obyvak
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_obyvak, switch.topeni_standby_obyvak]
+
+  - id: topeni_obyvak_komfort_off
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_obyvak
+        to: 'off'
+    condition:
+      - condition: state
+        entity_id: switch.topeni_standby_obyvak
+        state: 'off'
+      - condition: state
+        entity_id: switch.topeni_noc_obyvak
+        state: 'off'
+    action:
+      - service: switch.turn_on
+        target: {entity_id: switch.topeni_noc_obyvak}
+
+  - id: topeni_dp1_komfort_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_dp1
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_standby_dp1, switch.topeni_noc_dp1]
+
+  - id: topeni_dp1_standby_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_standby_dp1
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_dp1, switch.topeni_noc_dp1]
+
+  - id: topeni_dp1_noc_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_noc_dp1
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_dp1, switch.topeni_standby_dp1]
+
+  - id: topeni_dp1_komfort_off
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_dp1
+        to: 'off'
+    condition:
+      - condition: state
+        entity_id: switch.topeni_standby_dp1
+        state: 'off'
+      - condition: state
+        entity_id: switch.topeni_noc_dp1
+        state: 'off'
+    action:
+      - service: switch.turn_on
+        target: {entity_id: switch.topeni_noc_dp1}
+
+  - id: topeni_dp2_komfort_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_dp2
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_standby_dp2, switch.topeni_noc_dp2]
+
+  - id: topeni_dp2_standby_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_standby_dp2
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_dp2, switch.topeni_noc_dp2]
+
+  - id: topeni_dp2_noc_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_noc_dp2
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_dp2, switch.topeni_standby_dp2]
+
+  - id: topeni_dp2_komfort_off
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_dp2
+        to: 'off'
+    condition:
+      - condition: state
+        entity_id: switch.topeni_standby_dp2
+        state: 'off'
+      - condition: state
+        entity_id: switch.topeni_noc_dp2
+        state: 'off'
+    action:
+      - service: switch.turn_on
+        target: {entity_id: switch.topeni_noc_dp2}
+
+  - id: topeni_loznice_komfort_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_loznice
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_standby_loznice, switch.topeni_noc_loznice]
+
+  - id: topeni_loznice_standby_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_standby_loznice
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_loznice, switch.topeni_noc_loznice]
+
+  - id: topeni_loznice_noc_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_noc_loznice
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_loznice, switch.topeni_standby_loznice]
+
+  - id: topeni_loznice_komfort_off
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_loznice
+        to: 'off'
+    condition:
+      - condition: state
+        entity_id: switch.topeni_standby_loznice
+        state: 'off'
+      - condition: state
+        entity_id: switch.topeni_noc_loznice
+        state: 'off'
+    action:
+      - service: switch.turn_on
+        target: {entity_id: switch.topeni_noc_loznice}
+
+  - id: topeni_pracovna_komfort_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_pracovna
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_standby_pracovna, switch.topeni_noc_pracovna]
+
+  - id: topeni_pracovna_standby_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_standby_pracovna
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_pracovna, switch.topeni_noc_pracovna]
+
+  - id: topeni_pracovna_noc_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_noc_pracovna
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_pracovna, switch.topeni_standby_pracovna]
+
+  - id: topeni_pracovna_komfort_off
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_pracovna
+        to: 'off'
+    condition:
+      - condition: state
+        entity_id: switch.topeni_standby_pracovna
+        state: 'off'
+      - condition: state
+        entity_id: switch.topeni_noc_pracovna
+        state: 'off'
+    action:
+      - service: switch.turn_on
+        target: {entity_id: switch.topeni_noc_pracovna}
+
+  - id: topeni_koupelna2np_komfort_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_koupelna_2np
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_standby_koupelna_2np, switch.topeni_noc_koupelna_2np]
+
+  - id: topeni_koupelna2np_standby_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_standby_koupelna_2np
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_koupelna_2np, switch.topeni_noc_koupelna_2np]
+
+  - id: topeni_koupelna2np_noc_on
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_noc_koupelna_2np
+        to: 'on'
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: [switch.topeni_komfort_koupelna_2np, switch.topeni_standby_koupelna_2np]
+
+  - id: topeni_koupelna2np_komfort_off
+    trigger:
+      - platform: state
+        entity_id: switch.topeni_komfort_koupelna_2np
+        to: 'off'
+    condition:
+      - condition: state
+        entity_id: switch.topeni_standby_koupelna_2np
+        state: 'off'
+      - condition: state
+        entity_id: switch.topeni_noc_koupelna_2np
+        state: 'off'
+    action:
+      - service: switch.turn_on
+        target: {entity_id: switch.topeni_noc_koupelna_2np}

@@ -1,0 +1,2627 @@
+# Lovelace Dashboard - Rodinný dům
+# Styl: glassmorphism (priklad-projektu-1) + layout (priklad-projektu-2)
+# Nahraj přes: Nastavení → Dashboardy → přidat → Raw config editor
+
+# ============================================================
+# BUTTON CARD TEMPLATES
+# ============================================================
+button_card_templates:
+  mistnost_karta:
+    variables:
+      var_name: Místnost
+      var_navigate: "#"
+      var_sensor_svetla: false
+      var_sensor_teplota: false
+      var_sensor_komfort: false
+      var_sensor_standby: false
+      var_sensor_noc: false
+      var_klima: false
+      var_sensor_okna: false
+    triggers_update: all
+    show_icon: false
+    extra_styles: |
+      [[[
+        const svetlo_on = variables.var_sensor_svetla && states[variables.var_sensor_svetla]?.state === 'on';
+        return `ha-card {
+          background: var(--mik-card-bg) !important;
+          backdrop-filter: blur(10px) saturate(1.2);
+          -webkit-backdrop-filter: blur(10px) saturate(1.2);
+          border: 0.5px solid ${svetlo_on ? 'rgba(255,193,7,0.45)' : 'rgba(255,255,255,0.12)'};
+          border-radius: 18px;
+          box-shadow: ${svetlo_on ? '0 0 20px rgba(255,193,7,0.12)' : 'var(--mik-card-shadow)'};
+        }`;
+      ]]]
+    tap_action:
+      action: navigate
+      navigation_path: "[[[ return '/muj-dum/domov' + variables.var_navigate ]]]"
+    name: |
+      [[[
+        const on = variables.var_sensor_svetla && states[variables.var_sensor_svetla]?.state === 'on';
+        const icoColor = on ? 'var(--mik-color-svetlo)' : 'var(--mik-btn-icon)';
+        return `<ha-icon icon="mdi:lightbulb" style="width:18px;color:${icoColor};vertical-align:middle;margin-right:5px;margin-top:-5px"></ha-icon>${variables.var_name}<ha-icon icon="mdi:chevron-right" style="width:26px;position:absolute;top:-2px;right:10px;color:rgba(234,235,238,0.35)"></ha-icon>`;
+      ]]]
+    custom_fields:
+      teplota: |
+        [[[
+          if (!variables.var_sensor_teplota) return '';
+          const t = states[variables.var_sensor_teplota]?.state;
+          if (!t || t === 'unknown' || t === 'unavailable') return '';
+          return `<span style="font-size:22px;font-weight:700;color:var(--mik-text-primary)">${parseFloat(t).toFixed(1)}<small style="font-size:50%;font-weight:400;color:var(--mik-text-muted)"> °C</small></span>`;
+        ]]]
+      termostat: |
+        [[[
+          const winOpen = variables.var_sensor_okna && variables.var_sensor_okna.split(',').some(id => states[id.trim()]?.state === 'off');
+          const winIcon = winOpen ? `<ha-icon icon="mdi:window-open" style="width:16px;color:var(--mik-color-alarm);vertical-align:middle"></ha-icon>` : '';
+          const chlazeni = variables.var_klima && states[variables.var_klima]?.state === 'on';
+          const snow = chlazeni ? `<ha-icon icon="mdi:snowflake" style="width:16px;color:var(--mik-color-klima);vertical-align:middle"></ha-icon>` : '';
+          let modeIcon = '';
+          if (variables.var_sensor_komfort) {
+            if (states[variables.var_sensor_komfort]?.state === 'on')
+              modeIcon = `<ha-icon icon="mdi:home-account" style="width:20px;color:var(--mik-color-komfort);vertical-align:middle"></ha-icon>`;
+            else if (states[variables.var_sensor_standby]?.state === 'on')
+              modeIcon = `<ha-icon icon="mdi:home-outline" style="width:20px;color:var(--mik-color-standby);vertical-align:middle"></ha-icon>`;
+            else if (states[variables.var_sensor_noc]?.state === 'on')
+              modeIcon = `<ha-icon icon="mdi:weather-night" style="width:20px;color:var(--mik-color-utlum);vertical-align:middle"></ha-icon>`;
+          }
+          return winIcon + snow + modeIcon;
+        ]]]
+    styles:
+      card:
+        - height: 88px
+        - padding: 10px 16px 10px 12px
+        - cursor: pointer
+      name:
+        - position: absolute
+        - top: 10px
+        - left: 12px
+        - font-size: 15px
+        - font-weight: 600
+        - color: var(--mik-text-primary)
+        - width: calc(100% - 20px)
+        - text-align: left
+      grid:
+        - grid-template-areas: "\". .\" \"teplota termostat\""
+        - grid-template-columns: 1fr 60px
+        - grid-template-rows: 1fr auto
+        - align-items: end
+      custom_fields:
+        teplota:
+          - text-align: left
+          - padding-left: 3px
+        termostat:
+          - text-align: right
+  svetlo_btn:
+    variables:
+      entity: light.svetlo_hala
+      name: Světlo
+      icon: mdi:lightbulb
+    triggers_update:
+      - "[[[ return variables.entity; ]]]"
+    extra_styles: |
+      [[[
+        const on = states[variables.entity]?.state === 'on';
+        return `ha-card {
+          background: ${on ? 'var(--mik-color-svetlo-bg)' : 'var(--mik-btn-bg)'};
+          border: 0.5px solid ${on ? 'var(--mik-color-svetlo-border)' : 'rgba(255,255,255,0.1)'};
+          border-radius: 14px;
+          box-shadow: ${on ? '0 0 12px rgba(255,193,7,0.1)' : 'none'};
+        }`;
+      ]]]
+    tap_action:
+      action: call-service
+      service: light.toggle
+      service_data:
+        entity_id: "[[[ return variables.entity ]]]"
+    custom_fields:
+      ico: |
+        [[[
+          const on = states[variables.entity]?.state === 'on';
+          return `<ha-icon icon="${variables.icon}"
+            style="width:20px;color:${on ? 'var(--mik-color-svetlo)' : 'var(--mik-btn-icon)'}">
+          </ha-icon>`;
+        ]]]
+      lbl: "[[[ return variables.name ]]]"
+    styles:
+      card:
+        - padding: 8px 10px
+        - height: 50px
+      grid:
+        - grid-template-areas: "\"ico lbl\""
+        - grid-template-columns: 30px 1fr
+        - grid-template-rows: 1fr
+        - align-items: center
+      custom_fields:
+        lbl:
+          - font-size: 13px
+          - color: var(--mik-text-secondary)
+          - text-align: left
+  okno_btn:
+    variables:
+      entity: binary_sensor.okno_obyvak
+      name: Okno
+    triggers_update:
+      - "[[[ return variables.entity; ]]]"
+    show_icon: false
+    tap_action:
+      action: none
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+    extra_styles: |
+      [[[
+        return `ha-card {
+          background: var(--mik-btn-bg);
+          border: 0.5px solid rgba(255,255,255,0.10);
+          border-radius: 14px;
+          cursor: default !important;
+        }
+        mwc-ripple { display: none !important; }
+        ha-card:hover { opacity: 1 !important; }`;
+      ]]]
+    custom_fields:
+      ico: |
+        [[[
+          const open = states[variables.entity]?.state === 'off';
+          return `<ha-icon icon="${open ? 'mdi:window-open' : 'mdi:window-closed-variant'}"
+            style="width:20px;color:${open ? 'var(--mik-color-alarm)' : 'var(--mik-color-komfort)'}">
+          </ha-icon>`;
+        ]]]
+      lbl: "[[[ return variables.name ]]]"
+    styles:
+      card:
+        - padding: 8px 10px
+        - height: 50px
+      grid:
+        - grid-template-areas: "\"ico lbl\""
+        - grid-template-columns: 30px 1fr
+        - grid-template-rows: 1fr
+        - align-items: center
+      custom_fields:
+        lbl:
+          - font-size: 13px
+          - color: var(--mik-text-secondary)
+          - text-align: left
+  rezim_btn:
+    variables:
+      entity: switch.rezim_topeni_dp1
+      name: Topení
+      icon: mdi:radiator
+      active_state: "on"
+      color_on: var(--mik-color-alarm)
+    triggers_update:
+      - "[[[ return variables.entity; ]]]"
+    show_icon: false
+    tap_action:
+      action: call-service
+      service: >-
+        [[[ return variables.active_state === 'on' ? 'switch.turn_on' :
+        'switch.turn_off' ]]]
+      service_data:
+        entity_id: "[[[ return variables.entity ]]]"
+    custom_fields:
+      ico: |
+        [[[
+          const active = states[variables.entity]?.state === variables.active_state;
+          return `<ha-icon icon="${variables.icon}"
+            style="width:28px;color:${active ? variables.color_on : 'var(--mik-btn-icon)'}">
+          </ha-icon>`;
+        ]]]
+      lbl: "[[[ return variables.name ]]]"
+    styles:
+      card:
+        - padding: 10px
+        - background: |
+            [[[
+              const active = states[variables.entity]?.state === variables.active_state;
+              return active ? 'var(--mik-btn-bg-active)' : 'var(--mik-btn-bg)';
+            ]]]
+        - border: |
+            [[[
+              const active = states[variables.entity]?.state === variables.active_state;
+              return active ? 'var(--mik-btn-border-active)' : 'var(--mik-btn-border)';
+            ]]]
+        - border-radius: 14px
+        - transition: background 0.2s
+      grid:
+        - grid-template-areas: "\"ico\" \"lbl\""
+        - grid-template-columns: 1fr
+        - grid-template-rows: auto auto
+        - justify-items: center
+        - gap: 4px
+      custom_fields:
+        ico:
+          - text-align: center
+        lbl:
+          - font-size: 12px
+          - color: var(--mik-btn-text)
+          - text-align: center
+  topeni_mode_btn:
+    variables:
+      entity: switch.topeni_komfort_obyvak
+      name: Komfort
+      icon: mdi:home-account
+      color_on: var(--mik-color-komfort)
+    triggers_update:
+      - "[[[ return variables.entity; ]]]"
+    tap_action:
+      action: call-service
+      service: switch.turn_on
+      service_data:
+        entity_id: "[[[ return variables.entity ]]]"
+    custom_fields:
+      ico: |
+        [[[
+          const on = states[variables.entity]?.state === 'on';
+          return `<ha-icon icon="${variables.icon}"
+            style="width:28px;color:${on ? variables.color_on : 'var(--mik-btn-icon)'}">
+          </ha-icon>`;
+        ]]]
+      lbl: "[[[ return variables.name ]]]"
+    styles:
+      card:
+        - padding: 10px
+        - background: |
+            [[[
+              const on = states[variables.entity]?.state === 'on';
+              return on ? 'var(--mik-btn-bg-active)' : 'var(--mik-btn-bg)';
+            ]]]
+        - border: |
+            [[[
+              const on = states[variables.entity]?.state === 'on';
+              return on ? 'var(--mik-btn-border-active)' : 'var(--mik-btn-border)';
+            ]]]
+        - border-radius: 14px
+        - transition: background 0.2s
+      grid:
+        - grid-template-areas: "\"ico\" \"lbl\""
+        - grid-template-columns: 1fr
+        - grid-template-rows: auto auto
+        - justify-items: center
+        - gap: 4px
+      custom_fields:
+        ico:
+          - text-align: center
+        lbl:
+          - font-size: 12px
+          - color: >-
+              [[[ return states[variables.entity]?.state === 'on' ?
+              'var(--mik-btn-text-active)' : 'var(--mik-btn-text)' ]]]
+          - text-align: center
+  plan_btn:
+    variables:
+      entity: input_select.topeni_plan_obyvak
+      plan: Ruční
+      icon: mdi:hand-back-right
+      color_on: var(--mik-btn-text-active)
+    triggers_update:
+      - "[[[ return variables.entity; ]]]"
+    show_icon: false
+    tap_action:
+      action: call-service
+      service: input_select.select_option
+      service_data:
+        entity_id: "[[[ return variables.entity ]]]"
+        option: "[[[ return variables.plan ]]]"
+    custom_fields:
+      ico: |
+        [[[
+          const active = states[variables.entity]?.state === variables.plan;
+          return `<ha-icon icon="${variables.icon}"
+            style="width:24px;color:${active ? variables.color_on : 'var(--mik-btn-icon)'}">
+          </ha-icon>`;
+        ]]]
+      lbl: "[[[ return variables.plan ]]]"
+    styles:
+      card:
+        - padding: 8px
+        - background: |
+            [[[
+              const active = states[variables.entity]?.state === variables.plan;
+              return active ? 'var(--mik-btn-bg-active)' : 'var(--mik-btn-bg)';
+            ]]]
+        - border: |
+            [[[
+              const active = states[variables.entity]?.state === variables.plan;
+              return active ? 'var(--mik-btn-border-active)' : 'var(--mik-btn-border)';
+            ]]]
+        - border-radius: 12px
+        - transition: background 0.2s
+      grid:
+        - grid-template-areas: "\"ico\" \"lbl\""
+        - grid-template-columns: 1fr
+        - grid-template-rows: auto auto
+        - justify-items: center
+        - gap: 3px
+      custom_fields:
+        ico:
+          - text-align: center
+        lbl:
+          - font-size: 11px
+          - color: >-
+              [[[ return states[variables.entity]?.state === variables.plan ?
+              'var(--mik-btn-text-active)' : 'var(--mik-btn-text)' ]]]
+          - text-align: center
+  schedule_link_btn:
+    variables:
+      entity: schedule.topeni_obyvak
+      name: Vlastní
+    entity: "[[[ return variables.entity ]]]"
+    show_icon: false
+    tap_action:
+      action: more-info
+    custom_fields:
+      ico: |
+        [[[
+          return `<ha-icon icon="mdi:cog" style="width:18px;color:var(--mik-btn-icon)"></ha-icon>`;
+        ]]]
+      lbl: "[[[ return variables.name ]]]"
+    styles:
+      card:
+        - padding: 10px 8px
+        - background: var(--mik-btn-bg)
+        - border: var(--mik-btn-border)
+        - border-radius: 12px
+      grid:
+        - grid-template-areas: "\"ico lbl\""
+        - grid-template-columns: 26px 1fr
+        - align-items: center
+      custom_fields:
+        ico:
+          - text-align: center
+        lbl:
+          - font-size: 12px
+          - color: var(--mik-btn-text)
+          - text-align: left
+  ventilace_btn:
+    variables:
+      entity: switch.ventilace_sklep
+      name: Ventilátor
+    entity: "[[[ return variables.entity ]]]"
+    show_name: false
+    show_icon: false
+    tap_action:
+      action: toggle
+    extra_styles: |
+      [[[
+        const on = states[variables.entity]?.state === 'on';
+        return `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        ha-card {
+          background: ${on ? 'var(--mik-color-ventilace-bg)' : 'var(--mik-btn-bg)'};
+          border: 0.5px solid ${on ? 'var(--mik-color-ventilace-border)' : 'var(--mik-btn-border, rgba(255,255,255,0.1))'};
+          border-radius: 12px;
+        }`;
+      ]]]
+    custom_fields:
+      ico: |
+        [[[
+          const on = states[variables.entity]?.state === 'on';
+          return `<div style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;line-height:0;${on ? 'animation:rotating 1.5s linear infinite;transform-origin:50% 50%' : ''}">
+            <ha-icon icon="mdi:fan" style="--mdc-icon-size:20px;color:${on ? 'var(--mik-color-komfort)' : 'var(--mik-text-muted)'}"></ha-icon>
+          </div>`;
+        ]]]
+      lbl: "[[[ return variables.name ]]]"
+    styles:
+      card:
+        - height: 64px
+        - padding: 10px 12px
+      grid:
+        - grid-template-areas: "\"ico lbl\""
+        - grid-template-columns: 34px 1fr
+        - align-items: center
+      custom_fields:
+        lbl:
+          - font-size: 14px
+          - color: var(--mik-text-secondary)
+          - text-align: left
+views:
+  - title: Domov
+    path: domov
+    icon: mdi:home
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        column_span: 1
+        cards:
+          - type: custom:button-card
+            show_name: false
+            show_icon: false
+            card_mod:
+              style: |
+                ha-card {
+                  background: transparent !important;
+                  box-shadow: none !important;
+                  border: none !important;
+                }
+                ha-card::before {
+                  content: none !important;
+                }
+            extra_styles: |
+              ha-card {
+                background: transparent !important;
+                --ha-card-background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+              }
+            custom_fields:
+              cas: |
+                [[[
+                  const now = new Date();
+                  const cas = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+                  return `<div style="font-size:64px;font-weight:700;letter-spacing:-2px;color:var(--mik-text-primary);line-height:1">${cas}</div>`;
+                ]]]
+              datum: |
+                [[[
+                  const dny = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
+                  const mesice = ['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince'];
+                  const now = new Date();
+                  return `<div style="font-size:19px;font-weight:500;color:var(--mik-text-secondary)">${dny[now.getDay()]} ${now.getDate()}. ${mesice[now.getMonth()]}</div>`;
+                ]]]
+            styles:
+              card:
+                - padding: 18px 20px 14px
+              grid:
+                - grid-template-areas: "\"cas\" \"datum\""
+                - grid-template-columns: 1fr
+                - grid-template-rows: auto auto
+                - gap: 4px
+              custom_fields:
+                cas:
+                  - text-align: center
+                datum:
+                  - text-align: center
+            grid_options:
+              columns: 12
+              rows: auto
+          - type: horizontal-stack
+            card_mod:
+              style: |
+                ha-card {
+                  background: transparent !important;
+                  box-shadow: none !important;
+                  border: none !important;
+                }
+                ha-card::before {
+                  content: none !important;
+                }
+            cards:
+              - type: custom:button-card
+                entity: sensor.sun_next_setting
+                icon: mdi:thermometer
+                show_icon: true
+                show_name: true
+                name: >
+                  [[[ return (states['sensor.teplota_venku']?.state ?? '--') + '
+                  °C' ]]]
+                show_label: true
+                label: Venkovní
+                size: 55%
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: transparent !important;
+                      box-shadow: none !important;
+                      border: none !important;
+                    }
+                    ha-card::before {
+                      content: none !important;
+                    }
+                extra_styles: |
+                  ha-card {
+                    background: transparent !important;
+                    --ha-card-background: transparent !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                    backdrop-filter: none !important;
+                    -webkit-backdrop-filter: none !important;
+                  }
+                styles:
+                  card:
+                    - padding: 10px 14px
+                    - height: 100px
+                  icon:
+                    - color: var(--mik-color-utlum)
+                  name:
+                    - font-size: 30px
+                    - color: var(--mik-text-primary)
+                    - line-height: "1"
+                  label:
+                    - font-size: 11px
+                    - color: var(--mik-text-muted)
+                    - margin-top: "-2px"
+                  grid:
+                    - grid-template-areas: "\"i n\" \"i l\""
+                    - grid-template-columns: 65px 1fr
+                    - grid-template-rows: auto auto
+                    - gap: 2px
+              - type: custom:button-card
+                icon: mdi:thermometer
+                show_icon: true
+                show_name: true
+                name: >
+                  [[[ return (states['sensor.teplota_sklep']?.state ?? '--') + '
+                  °C' ]]]
+                show_label: true
+                label: Sklep
+                size: 55%
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: transparent !important;
+                      box-shadow: none !important;
+                      border: none !important;
+                    }
+                    ha-card::before {
+                      content: none !important;
+                    }
+                extra_styles: |
+                  ha-card {
+                    background: transparent !important;
+                    --ha-card-background: transparent !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                    backdrop-filter: none !important;
+                    -webkit-backdrop-filter: none !important;
+                  }
+                styles:
+                  card:
+                    - padding: 10px 14px
+                    - height: 100px
+                  icon:
+                    - color: var(--mik-color-utlum)
+                  name:
+                    - font-size: 30px
+                    - color: var(--mik-text-primary)
+                    - line-height: "1"
+                  label:
+                    - font-size: 11px
+                    - color: var(--mik-text-muted)
+                    - margin-top: "-2px"
+                  grid:
+                    - grid-template-areas: "\"i n\" \"i l\""
+                    - grid-template-columns: 65px 1fr
+                    - grid-template-rows: auto auto
+                    - gap: 2px
+            grid_options:
+              columns: 12
+              rows: auto
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                entity: switch.topeni_komfort_obyvak
+                show_name: false
+                show_icon: false
+                tap_action:
+                  action: navigate
+                  navigation_path: /muj-dum/domov#popup-topeni
+                extra_styles: |
+                  ha-card {
+                    background: rgba(255,255,255,0.01);
+                    backdrop-filter: blur(10px) saturate(1.2);
+                    -webkit-backdrop-filter: blur(10px) saturate(1.2);
+                    border: var(--mik-card-border);
+                    border-radius: 14px;
+                    box-shadow: var(--mik-card-shadow);
+                  }
+                custom_fields:
+                  ico: |
+                    [[[
+                      return `<ha-icon icon="mdi:radiator"
+                        style="width:20px;color:var(--mik-color-alarm)"></ha-icon>`;
+                    ]]]
+                  lbl: Topení
+                styles:
+                  card:
+                    - height: 50px
+                    - padding-left: 12px
+                  grid:
+                    - grid-template-areas: "\"ico lbl\""
+                    - grid-template-columns: 30px 1fr
+                    - align-items: center
+                  custom_fields:
+                    lbl:
+                      - font-size: 14px
+                      - color: var(--mik-text-secondary)
+                      - text-align: left
+              - type: custom:button-card
+                entity: switch.ventilace_sklep
+                show_name: false
+                show_icon: false
+                tap_action:
+                  action: navigate
+                  navigation_path: /muj-dum/domov#popup-ventilace
+                extra_styles: |
+                  [[[
+                    const on = states['switch.ventilace_sklep']?.state === 'on';
+                    return `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+                    ha-card {
+                      background: rgba(255,255,255,0.01);
+                      backdrop-filter: blur(10px) saturate(1.2);
+                      -webkit-backdrop-filter: blur(10px) saturate(1.2);
+                      border: 0.5px solid ${on ? 'var(--mik-color-ventilace-border)' : 'rgba(255,255,255,0.12)'};
+                      border-radius: 14px;
+                      box-shadow: var(--mik-card-shadow);
+                    }`;
+                  ]]]
+                custom_fields:
+                  ico: |
+                    [[[
+                      const on = states['switch.ventilace_sklep']?.state === 'on';
+                      return `<div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;line-height:0;${on ? 'animation:rotating 1.5s linear infinite;transform-origin:50% 50%' : ''}">
+                        <ha-icon icon="mdi:fan" style="--mdc-icon-size:18px;color:${on ? 'var(--mik-color-komfort)' : 'var(--mik-text-muted)'}"></ha-icon>
+                      </div>`;
+                    ]]]
+                  lbl: Větrání
+                styles:
+                  card:
+                    - height: 50px
+                    - padding-left: 12px
+                  grid:
+                    - grid-template-areas: "\"ico lbl\""
+                    - grid-template-columns: 30px 1fr
+                    - align-items: center
+                  custom_fields:
+                    lbl:
+                      - font-size: 14px
+                      - color: var(--mik-text-secondary)
+                      - text-align: left
+              - type: custom:button-card
+                entity: light.svetlo_obyvak_1
+                show_name: false
+                show_icon: false
+                tap_action:
+                  action: navigate
+                  navigation_path: /muj-dum/domov#popup-svetla
+                extra_styles: |
+                  ha-card {
+                    background: rgba(255,255,255,0.01);
+                    backdrop-filter: blur(10px) saturate(1.2);
+                    -webkit-backdrop-filter: blur(10px) saturate(1.2);
+                    border: var(--mik-card-border);
+                    border-radius: 14px;
+                    box-shadow: var(--mik-card-shadow);
+                  }
+                custom_fields:
+                  ico: |
+                    [[[
+                      return `<ha-icon icon="mdi:lightbulb-group"
+                        style="width:20px;color:var(--mik-color-svetlo)"></ha-icon>`;
+                    ]]]
+                  lbl: Světla
+                styles:
+                  card:
+                    - height: 50px
+                    - padding-left: 12px
+                  grid:
+                    - grid-template-areas: "\"ico lbl\""
+                    - grid-template-columns: 30px 1fr
+                    - align-items: center
+                  custom_fields:
+                    lbl:
+                      - font-size: 14px
+                      - color: var(--mik-text-secondary)
+                      - text-align: left
+              - type: custom:button-card
+                entity: binary_sensor.okno_obyvak
+                show_name: false
+                show_icon: false
+                triggers_update: all
+                tap_action:
+                  action: navigate
+                  navigation_path: /muj-dum/nastaveni
+                extra_styles: |
+                  [[[
+                    const wins = ['binary_sensor.okno_obyvak','binary_sensor.okno_kuchyn','binary_sensor.okno_dp1_a','binary_sensor.okno_dp1_b','binary_sensor.okno_dp2','binary_sensor.okno_loznice','binary_sensor.okno_pracovna','binary_sensor.okno_terasa','binary_sensor.okno_garaz','binary_sensor.okno_kotelna'];
+                    const anyOpen = wins.some(id => states[id]?.state === 'off');
+                    return `ha-card {
+                      background: rgba(255,255,255,0.01);
+                      backdrop-filter: blur(10px) saturate(1.2);
+                      -webkit-backdrop-filter: blur(10px) saturate(1.2);
+                      border: 0.5px solid ${anyOpen ? 'rgba(234,114,135,0.40)' : 'rgba(255,255,255,0.12)'};
+                      border-radius: 14px;
+                      box-shadow: var(--mik-card-shadow);
+                    }`;
+                  ]]]
+                custom_fields:
+                  ico: |
+                    [[[
+                      const wins = ['binary_sensor.okno_obyvak','binary_sensor.okno_kuchyn','binary_sensor.okno_dp1_a','binary_sensor.okno_dp1_b','binary_sensor.okno_dp2','binary_sensor.okno_loznice','binary_sensor.okno_pracovna','binary_sensor.okno_terasa','binary_sensor.okno_garaz','binary_sensor.okno_kotelna'];
+                      const anyOpen = wins.some(id => states[id]?.state === 'off');
+                      return `<ha-icon icon="${anyOpen ? 'mdi:window-open' : 'mdi:window-closed-variant'}"
+                        style="width:20px;color:${anyOpen ? 'var(--mik-color-alarm)' : 'var(--mik-color-komfort)'}"></ha-icon>`;
+                    ]]]
+                  lbl: Okna
+                styles:
+                  card:
+                    - height: 50px
+                    - padding-left: 12px
+                  grid:
+                    - grid-template-areas: "\"ico lbl\""
+                    - grid-template-columns: 30px 1fr
+                    - align-items: center
+                  custom_fields:
+                    lbl:
+                      - font-size: 14px
+                      - color: var(--mik-text-secondary)
+                      - text-align: left
+            grid_options:
+              columns: 12
+              rows: auto
+      - type: grid
+        column_span: 1
+        cards:
+          - type: picture-glance
+            image: /api/image/serve/74d88a6f64a7edda57697954683556c4/512x512
+            entities: []
+            title: Hlavní kamera
+            grid_options:
+              columns: 12
+              rows: 4
+            card_mod:
+              style: |
+                ha-card {
+                  height: 295px !important;
+                }
+                ha-card img {
+                  object-fit: cover;
+                  height: 100%;
+                }
+      - type: grid
+        column_span: 1
+        card_mod:
+          style: |
+            @media (max-width: 768px) {
+              :host {
+                display: none !important;
+              }
+            }
+        cards:
+          - type: weather-forecast
+            entity: weather.openweathermap
+            forecast_type: daily
+            grid_options:
+              columns: 12
+              rows: auto
+            card_mod:
+              style: |
+                ha-card {
+                  height: 295px !important;
+                }
+                ha-card img {
+                  object-fit: cover;
+                  height: 100%;
+                }
+      - type: grid
+        column_span: 1
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Obývací pokoj
+                  var_navigate: "#popup-obyvak"
+                  var_sensor_svetla: light.svetlo_obyvak_1
+                  var_sensor_teplota: sensor.teplota_obyvak
+                  var_sensor_komfort: switch.topeni_komfort_obyvak
+                  var_sensor_standby: switch.topeni_standby_obyvak
+                  var_sensor_noc: switch.topeni_noc_obyvak
+                  var_sensor_okna: binary_sensor.okno_obyvak
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Kuchyň
+                  var_navigate: "#popup-kuchyn"
+                  var_sensor_svetla: light.svetlo_kuchyn_central
+                  var_sensor_teplota: false
+                  var_sensor_komfort: false
+                  var_sensor_standby: false
+                  var_sensor_noc: false
+                  var_sensor_okna: binary_sensor.okno_kuchyn
+            grid_options:
+              columns: 12
+              rows: auto
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Dětský pokoj 1
+                  var_navigate: "#popup-dp1"
+                  var_sensor_svetla: light.svetlo_detsky_pokoj_1
+                  var_sensor_teplota: sensor.teplota_detsky_pokoj_1
+                  var_sensor_komfort: switch.topeni_komfort_dp1
+                  var_sensor_standby: switch.topeni_standby_dp1
+                  var_sensor_noc: switch.topeni_noc_dp1
+                  var_klima: switch.rezim_topeni_dp1
+                  var_sensor_okna: binary_sensor.okno_dp1_a,binary_sensor.okno_dp1_b
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Dětský pokoj 2
+                  var_navigate: "#popup-dp2"
+                  var_sensor_svetla: light.svetlo_detsky_pokoj_2
+                  var_sensor_teplota: sensor.teplota_detsky_pokoj_2
+                  var_sensor_komfort: switch.topeni_komfort_dp2
+                  var_sensor_standby: switch.topeni_standby_dp2
+                  var_sensor_noc: switch.topeni_noc_dp2
+                  var_klima: switch.rezim_topeni_dp2
+                  var_sensor_okna: binary_sensor.okno_dp2
+            grid_options:
+              columns: 12
+              rows: auto
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Ložnice
+                  var_navigate: "#popup-loznice"
+                  var_sensor_svetla: light.svetlo_loznice
+                  var_sensor_teplota: sensor.teplota_loznice
+                  var_sensor_komfort: switch.topeni_komfort_loznice
+                  var_sensor_standby: switch.topeni_standby_loznice
+                  var_sensor_noc: switch.topeni_noc_loznice
+                  var_klima: switch.rezim_topeni_loznice
+                  var_sensor_okna: binary_sensor.okno_loznice
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Pracovna
+                  var_navigate: "#popup-pracovna"
+                  var_sensor_svetla: light.svetlo_pracovna
+                  var_sensor_teplota: sensor.teplota_pracovna
+                  var_sensor_komfort: switch.topeni_komfort_pracovna
+                  var_sensor_standby: switch.topeni_standby_pracovna
+                  var_sensor_noc: switch.topeni_noc_pracovna
+                  var_klima: switch.rezim_topeni_pracovna
+                  var_sensor_okna: binary_sensor.okno_pracovna
+            grid_options:
+              columns: 12
+              rows: auto
+      - type: grid
+        column_span: 1
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Koupelna 2NP
+                  var_navigate: "#popup-koupelna2np"
+                  var_sensor_svetla: light.svetlo_koupelna_2np_strop
+                  var_sensor_teplota: sensor.teplota_koupelna_2np
+                  var_sensor_komfort: switch.topeni_komfort_koupelna_2np
+                  var_sensor_standby: switch.topeni_standby_koupelna_2np
+                  var_sensor_noc: switch.topeni_noc_koupelna_2np
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Garáž
+                  var_navigate: "#popup-garaz"
+                  var_sensor_svetla: light.svetlo_garaz
+                  var_sensor_teplota: false
+                  var_sensor_komfort: false
+                  var_sensor_standby: false
+                  var_sensor_noc: false
+                  var_sensor_okna: binary_sensor.okno_garaz
+            grid_options:
+              columns: 12
+              rows: auto
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Terasa
+                  var_navigate: "#popup-terasa"
+                  var_sensor_svetla: light.svetlo_terasa
+                  var_sensor_teplota: false
+                  var_sensor_komfort: false
+                  var_sensor_standby: false
+                  var_sensor_noc: false
+                  var_sensor_okna: binary_sensor.okno_terasa
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Sklep
+                  var_navigate: "#popup-sklep"
+                  var_sensor_svetla: light.svetlo_sklep
+                  var_sensor_teplota: false
+                  var_sensor_komfort: false
+                  var_sensor_standby: false
+                  var_sensor_noc: false
+            grid_options:
+              columns: 12
+              rows: auto
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Kotelna
+                  var_navigate: "#popup-kotelna"
+                  var_sensor_svetla: light.svetlo_kotelna
+                  var_sensor_teplota: false
+                  var_sensor_komfort: false
+                  var_sensor_standby: false
+                  var_sensor_noc: false
+                  var_sensor_okna: binary_sensor.okno_kotelna
+              - type: custom:button-card
+                template: mistnost_karta
+                variables:
+                  var_name: Vchod
+                  var_navigate: "#popup-vchod"
+                  var_sensor_svetla: light.svetlo_vchod
+                  var_sensor_teplota: false
+                  var_sensor_komfort: false
+                  var_sensor_standby: false
+                  var_sensor_noc: false
+            grid_options:
+              columns: 12
+              rows: auto
+      - type: grid
+        column_span: 1
+        cards:
+          - type: history-graph
+            title: Venkovní teplota — 24h
+            entities:
+              - entity: sensor.teplota_venku
+                name: Venku
+            hours_to_show: 24
+            grid_options:
+              columns: 12
+              rows: 4
+            card_mod:
+              style: |
+                ha-card {
+                  height: 280px !important;
+                }
+                ha-card img {
+                  object-fit: cover;
+                  height: 100%;
+                }
+      - type: grid
+        column_span: 3
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-obyvak"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Obývací pokoj
+            icon: mdi:sofa
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    show_name: false
+                    show_icon: false
+                    custom_fields:
+                      teplota: |
+                        [[[
+                          const t = states['sensor.teplota_obyvak']?.state;
+                          return t ? `<div style="font-size:52px;font-weight:700;color:rgba(255,255,255,0.95)">${parseFloat(t).toFixed(1)}<small style="font-size:40%"> °C</small></div>` : '—';
+                        ]]]
+                    styles:
+                      card:
+                        - background: transparent
+                        - border: 0
+                      grid:
+                        - grid-template-areas: "\"teplota\""
+                        - grid-template-columns: 1fr
+                      custom_fields:
+                        teplota:
+                          - text-align: left
+                          - padding-left: 4px
+              - type: custom:bubble-card
+                card_type: separator
+                name: Topení
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_obyvak
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_obyvak
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_obyvak
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: custom:bubble-card
+                card_type: separator
+                name: Okna
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: okno_btn
+                    variables:
+                      entity: binary_sensor.okno_obyvak
+                      name: Okno
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_obyvak_1
+                      name: Strop 1
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_obyvak_2
+                      name: Strop 2
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_obyvak_3
+                      name: Strop 3
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_obyvak_dim_1
+                      name: Stmívač 1
+                      icon: mdi:lightbulb-cfl
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_obyvak_dim_2
+                      name: Stmívač 2
+                      icon: mdi:lightbulb-cfl
+              - type: custom:bubble-card
+                card_type: separator
+                name: Historie teplot
+              - type: history-graph
+                entities:
+                  - entity: sensor.teplota_obyvak
+                    name: Obývák
+                  - entity: sensor.teplota_venku
+                    name: Venku
+                hours_to_show: 24
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-kuchyn"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Kuchyň
+            icon: mdi:pot-steam
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Okna
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: okno_btn
+                    variables:
+                      entity: binary_sensor.okno_kuchyn
+                      name: Okno
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_kuchyn_central
+                      name: Central
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_kuchyn_linka_p
+                      name: Linka P
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_kuchyn_linka_l
+                      name: Linka L
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_kuchyn_bar
+                      name: Bar
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-dp1"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Dětský pokoj 1
+            icon: mdi:bed
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    show_name: false
+                    show_icon: false
+                    custom_fields:
+                      teplota: |
+                        [[[
+                          const t = states['sensor.teplota_detsky_pokoj_1']?.state;
+                          return t ? `<div style="font-size:52px;font-weight:700;color:rgba(255,255,255,0.95)">${parseFloat(t).toFixed(1)}<small style="font-size:40%"> °C</small></div>` : '—';
+                        ]]]
+                    styles:
+                      card:
+                        - background: transparent
+                        - border: 0
+                      grid:
+                        - grid-template-areas: "\"teplota\""
+                        - grid-template-columns: 1fr
+              - type: custom:bubble-card
+                card_type: separator
+                name: Režim termostatu
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: rezim_btn
+                    variables:
+                      entity: switch.rezim_topeni_dp1
+                      name: Topení
+                      icon: mdi:radiator
+                      active_state: "off"
+                      color_on: var(--mik-color-alarm)
+                  - type: custom:button-card
+                    template: rezim_btn
+                    variables:
+                      entity: switch.rezim_topeni_dp1
+                      name: Chlazení
+                      icon: mdi:snowflake
+                      active_state: "on"
+                      color_on: var(--mik-color-klima)
+              - type: custom:bubble-card
+                card_type: separator
+                name: Režim klima
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_dp1
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_dp1
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_dp1
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: custom:bubble-card
+                card_type: separator
+                name: Okna
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: okno_btn
+                    variables:
+                      entity: binary_sensor.okno_dp1_a
+                      name: Okno A
+                  - type: custom:button-card
+                    template: okno_btn
+                    variables:
+                      entity: binary_sensor.okno_dp1_b
+                      name: Okno B
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_detsky_pokoj_1
+                      name: Světlo
+              - type: custom:bubble-card
+                card_type: separator
+                name: Historie teplot
+              - type: history-graph
+                entities:
+                  - entity: sensor.teplota_detsky_pokoj_1
+                    name: Dět. pokoj 1
+                  - entity: sensor.teplota_venku
+                    name: Venku
+                hours_to_show: 24
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-dp2"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Dětský pokoj 2
+            icon: mdi:bed
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    show_name: false
+                    show_icon: false
+                    custom_fields:
+                      teplota: |
+                        [[[
+                          const t = states['sensor.teplota_detsky_pokoj_2']?.state;
+                          return t ? `<div style="font-size:52px;font-weight:700;color:rgba(255,255,255,0.95)">${parseFloat(t).toFixed(1)}<small style="font-size:40%"> °C</small></div>` : '—';
+                        ]]]
+                    styles:
+                      card:
+                        - background: transparent
+                        - border: 0
+                      grid:
+                        - grid-template-areas: "\"teplota\""
+                        - grid-template-columns: 1fr
+              - type: custom:bubble-card
+                card_type: separator
+                name: Režim termostatu
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: rezim_btn
+                    variables:
+                      entity: switch.rezim_topeni_dp2
+                      name: Topení
+                      icon: mdi:radiator
+                      active_state: "off"
+                      color_on: var(--mik-color-alarm)
+                  - type: custom:button-card
+                    template: rezim_btn
+                    variables:
+                      entity: switch.rezim_topeni_dp2
+                      name: Chlazení
+                      icon: mdi:snowflake
+                      active_state: "on"
+                      color_on: var(--mik-color-klima)
+              - type: custom:bubble-card
+                card_type: separator
+                name: Režim klima
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_dp2
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_dp2
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_dp2
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: custom:bubble-card
+                card_type: separator
+                name: Okna
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: okno_btn
+                    variables:
+                      entity: binary_sensor.okno_dp2
+                      name: Okno
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_detsky_pokoj_2
+                      name: Světlo
+              - type: custom:bubble-card
+                card_type: separator
+                name: Historie teplot
+              - type: history-graph
+                entities:
+                  - entity: sensor.teplota_detsky_pokoj_2
+                    name: Dět. pokoj 2
+                  - entity: sensor.teplota_venku
+                    name: Venku
+                hours_to_show: 24
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-loznice"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Ložnice
+            icon: mdi:bed-king
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    show_name: false
+                    show_icon: false
+                    custom_fields:
+                      teplota: |
+                        [[[
+                          const t = states['sensor.teplota_loznice']?.state;
+                          return t ? `<div style="font-size:52px;font-weight:700;color:rgba(255,255,255,0.95)">${parseFloat(t).toFixed(1)}<small style="font-size:40%"> °C</small></div>` : '—';
+                        ]]]
+                    styles:
+                      card:
+                        - background: transparent
+                        - border: 0
+                      grid:
+                        - grid-template-areas: "\"teplota\""
+                        - grid-template-columns: 1fr
+              - type: custom:bubble-card
+                card_type: separator
+                name: Režim termostatu
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: rezim_btn
+                    variables:
+                      entity: switch.rezim_topeni_loznice
+                      name: Topení
+                      icon: mdi:radiator
+                      active_state: "off"
+                      color_on: var(--mik-color-alarm)
+                  - type: custom:button-card
+                    template: rezim_btn
+                    variables:
+                      entity: switch.rezim_topeni_loznice
+                      name: Chlazení
+                      icon: mdi:snowflake
+                      active_state: "on"
+                      color_on: var(--mik-color-klima)
+              - type: custom:bubble-card
+                card_type: separator
+                name: Režim klima
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_loznice
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_loznice
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_loznice
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: custom:bubble-card
+                card_type: separator
+                name: Okna
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: okno_btn
+                    variables:
+                      entity: binary_sensor.okno_loznice
+                      name: Okno
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_loznice
+                      name: Světlo
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_satna
+                      name: Šatna
+              - type: custom:bubble-card
+                card_type: separator
+                name: Historie teplot
+              - type: history-graph
+                entities:
+                  - entity: sensor.teplota_loznice
+                    name: Ložnice
+                  - entity: sensor.teplota_venku
+                    name: Venku
+                hours_to_show: 24
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-pracovna"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Pracovna
+            icon: mdi:desk-lamp
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    show_name: false
+                    show_icon: false
+                    custom_fields:
+                      teplota: |
+                        [[[
+                          const t = states['sensor.teplota_pracovna']?.state;
+                          return t ? `<div style="font-size:52px;font-weight:700;color:rgba(255,255,255,0.95)">${parseFloat(t).toFixed(1)}<small style="font-size:40%"> °C</small></div>` : '—';
+                        ]]]
+                    styles:
+                      card:
+                        - background: transparent
+                        - border: 0
+                      grid:
+                        - grid-template-areas: "\"teplota\""
+                        - grid-template-columns: 1fr
+              - type: custom:bubble-card
+                card_type: separator
+                name: Režim termostatu
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: rezim_btn
+                    variables:
+                      entity: switch.rezim_topeni_pracovna
+                      name: Topení
+                      icon: mdi:radiator
+                      active_state: "off"
+                      color_on: var(--mik-color-alarm)
+                  - type: custom:button-card
+                    template: rezim_btn
+                    variables:
+                      entity: switch.rezim_topeni_pracovna
+                      name: Chlazení
+                      icon: mdi:snowflake
+                      active_state: "on"
+                      color_on: var(--mik-color-klima)
+              - type: custom:bubble-card
+                card_type: separator
+                name: Režim klima
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_pracovna
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_pracovna
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_pracovna
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: custom:bubble-card
+                card_type: separator
+                name: Okna
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: okno_btn
+                    variables:
+                      entity: binary_sensor.okno_pracovna
+                      name: Okno
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_pracovna
+                      name: Světlo
+              - type: custom:bubble-card
+                card_type: separator
+                name: Historie teplot
+              - type: history-graph
+                entities:
+                  - entity: sensor.teplota_pracovna
+                    name: Pracovna
+                  - entity: sensor.teplota_venku
+                    name: Venku
+                hours_to_show: 24
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-koupelna2np"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Koupelna 2NP
+            icon: mdi:shower
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    show_name: false
+                    show_icon: false
+                    custom_fields:
+                      teplota: |
+                        [[[
+                          const t = states['sensor.teplota_koupelna_2np']?.state;
+                          return t ? `<div style="font-size:52px;font-weight:700;color:rgba(255,255,255,0.95)">${parseFloat(t).toFixed(1)}<small style="font-size:40%"> °C</small></div>` : '—';
+                        ]]]
+                    styles:
+                      card:
+                        - background: transparent
+                        - border: 0
+                      grid:
+                        - grid-template-areas: "\"teplota\""
+                        - grid-template-columns: 1fr
+              - type: custom:bubble-card
+                card_type: separator
+                name: Topení
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_koupelna_2np
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_koupelna_2np
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_koupelna_2np
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_koupelna_2np_strop
+                      name: Strop
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_koupelna_2np_zrcadlo
+                      name: Zrcadlo
+              - type: custom:bubble-card
+                card_type: separator
+                name: Historie teplot
+              - type: history-graph
+                entities:
+                  - entity: sensor.teplota_koupelna_2np
+                    name: Koupelna 2NP
+                  - entity: sensor.teplota_venku
+                    name: Venku
+                hours_to_show: 24
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-garaz"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Garáž
+            icon: mdi:garage
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Vrata / Brána
+              - type: horizontal-stack
+                cards:
+                  - type: button
+                    name: Vrata garáž
+                    icon: mdi:garage-open
+                    tap_action:
+                      action: call-service
+                      service: button.press
+                      target:
+                        entity_id: button.ovladani_vrata_garaz
+                  - type: button
+                    name: Brána vjezd
+                    icon: mdi:gate
+                    tap_action:
+                      action: call-service
+                      service: button.press
+                      target:
+                        entity_id: button.ovladani_brana_vjezd
+              - type: custom:bubble-card
+                card_type: separator
+                name: Stav
+              - type: entities
+                entities:
+                  - entity: binary_sensor.vrata_garaz_kontakt
+                    name: Vrata garáž
+                  - entity: binary_sensor.okno_garaz
+                    name: Okno garáž
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_garaz
+                      name: Garáž
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-terasa"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Terasa
+            icon: mdi:table-furniture
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Okna / Dveře
+              - type: entities
+                entities:
+                  - entity: binary_sensor.okno_terasa
+                    name: Okno terasa
+                  - entity: binary_sensor.dvere_terasa
+                    name: Dveře terasa
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_terasa
+                      name: Terasa
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-sklep"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Sklep
+            icon: mdi:stairs-down
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Ventilace
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: ventilace_btn
+                    variables:
+                      entity: switch.ventilace_sklep
+                      name: Sklep
+              - type: entities
+                entities:
+                  - entity: schedule.ventilace_sklep
+                    name: Rozvrh ventilace
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_sklep
+                      name: Sklep
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_schodiste_sklep
+                      name: Schodiště
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-kotelna"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Kotelna
+            icon: mdi:water-boiler
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Okna
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: okno_btn
+                    variables:
+                      entity: binary_sensor.okno_kotelna
+                      name: Okno
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_kotelna
+                      name: Světlo
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-vchod"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Vchod
+            icon: mdi:door-open
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Dveře
+              - type: entities
+                entities:
+                  - entity: binary_sensor.dvere_vstup
+                    name: Dveře vstup
+              - type: custom:bubble-card
+                card_type: separator
+                name: Světla
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_vchod
+                      name: Vchod
+                  - type: custom:button-card
+                    template: svetlo_btn
+                    variables:
+                      entity: light.svetlo_vchod_bok
+                      name: Boční
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-topeni"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Topení / Klima
+            icon: mdi:heat-wave
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Rychlé přepnutí všech místností
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    show_icon: false
+                    name: Komfort
+                    tap_action:
+                      action: call-service
+                      service: switch.turn_on
+                      target:
+                        entity_id:
+                          - switch.topeni_komfort_obyvak
+                          - switch.topeni_komfort_dp1
+                          - switch.topeni_komfort_dp2
+                          - switch.topeni_komfort_loznice
+                          - switch.topeni_komfort_pracovna
+                          - switch.topeni_komfort_koupelna_2np
+                    styles:
+                      card:
+                        - background: var(--mik-color-komfort-bg)
+                        - border: 0.5px solid var(--mik-color-komfort-border)
+                        - border-radius: 12px
+                        - height: 44px
+                      name:
+                        - color: var(--mik-color-komfort)
+                        - font-size: 14px
+                  - type: custom:button-card
+                    show_icon: false
+                    name: Standby
+                    tap_action:
+                      action: call-service
+                      service: switch.turn_on
+                      target:
+                        entity_id:
+                          - switch.topeni_standby_obyvak
+                          - switch.topeni_standby_dp1
+                          - switch.topeni_standby_dp2
+                          - switch.topeni_standby_loznice
+                          - switch.topeni_standby_pracovna
+                          - switch.topeni_standby_koupelna_2np
+                    styles:
+                      card:
+                        - background: var(--mik-color-standby-bg)
+                        - border: 0.5px solid var(--mik-color-standby-border)
+                        - border-radius: 12px
+                        - height: 44px
+                      name:
+                        - color: var(--mik-color-standby)
+                        - font-size: 14px
+                  - type: custom:button-card
+                    show_icon: false
+                    name: Útlum
+                    tap_action:
+                      action: call-service
+                      service: switch.turn_on
+                      target:
+                        entity_id:
+                          - switch.topeni_noc_obyvak
+                          - switch.topeni_noc_dp1
+                          - switch.topeni_noc_dp2
+                          - switch.topeni_noc_loznice
+                          - switch.topeni_noc_pracovna
+                          - switch.topeni_noc_koupelna_2np
+                    styles:
+                      card:
+                        - background: var(--mik-color-utlum-bg)
+                        - border: 0.5px solid var(--mik-color-utlum-border)
+                        - border-radius: 12px
+                        - height: 44px
+                      name:
+                        - color: var(--mik-color-utlum)
+                        - font-size: 14px
+              - type: custom:bubble-card
+                card_type: separator
+                name: Stav místností
+              - type: entities
+                entities:
+                  - entity: switch.topeni_komfort_obyvak
+                    name: Obývák – Komfort
+                  - entity: switch.topeni_komfort_dp1
+                    name: Dět. pokoj 1 – Komfort
+                  - entity: switch.topeni_komfort_dp2
+                    name: Dět. pokoj 2 – Komfort
+                  - entity: switch.topeni_komfort_loznice
+                    name: Ložnice – Komfort
+                  - entity: switch.topeni_komfort_pracovna
+                    name: Pracovna – Komfort
+                  - entity: switch.topeni_komfort_koupelna_2np
+                    name: Koupelna – Komfort
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-ventilace"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Ventilace
+            icon: mdi:fan
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: ventilace_btn
+                    variables:
+                      entity: switch.ventilace_sklep
+                      name: Sklep
+                  - type: custom:button-card
+                    template: ventilace_btn
+                    variables:
+                      entity: switch.ventilace_koupelna_1np
+                      name: Koupelna 1NP
+              - type: entities
+                entities:
+                  - entity: schedule.ventilace_sklep
+                    name: Rozvrh - Sklep
+                  - entity: schedule.ventilace_koupelna_1np
+                    name: Rozvrh - Koupelna 1NP
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#popup-svetla"
+            bg_color: rgb(15, 17, 23)
+            bg_opacity: 93
+            name: Světla
+            icon: mdi:lightbulb-group
+            cards:
+              - type: entities
+                entities:
+                  - entity: light.svetlo_obyvak_1
+                    name: Obývák 1
+                  - entity: light.svetlo_obyvak_2
+                    name: Obývák 2
+                  - entity: light.svetlo_obyvak_3
+                    name: Obývák 3
+                  - entity: light.svetlo_obyvak_dim_1
+                    name: Obývák stmívač 1
+                  - entity: light.svetlo_obyvak_dim_2
+                    name: Obývák stmívač 2
+                  - entity: light.svetlo_kuchyn_central
+                    name: Kuchyň central
+                  - entity: light.svetlo_kuchyn_linka_p
+                    name: Kuchyň linka P
+                  - entity: light.svetlo_kuchyn_linka_l
+                    name: Kuchyň linka L
+                  - entity: light.svetlo_kuchyn_bar
+                    name: Kuchyň bar
+                  - entity: light.svetlo_hala
+                    name: Hala
+                  - entity: light.svetlo_chodba
+                    name: Chodba
+                  - entity: light.svetlo_detsky_pokoj_1
+                    name: Dětský pokoj 1
+                  - entity: light.svetlo_detsky_pokoj_2
+                    name: Dětský pokoj 2
+                  - entity: light.svetlo_loznice
+                    name: Ložnice
+                  - entity: light.svetlo_satna
+                    name: Šatna
+                  - entity: light.svetlo_pracovna
+                    name: Pracovna
+                  - entity: light.svetlo_koupelna_2np_strop
+                    name: Koupelna 2NP strop
+                  - entity: light.svetlo_koupelna_2np_zrcadlo
+                    name: Koupelna 2NP zrcadlo
+                  - entity: light.svetlo_koupelna_1np_strop
+                    name: Koupelna 1NP strop
+                  - entity: light.svetlo_koupelna_1np_zrcadlo
+                    name: Koupelna 1NP zrcadlo
+                  - entity: light.svetlo_wc
+                    name: WC
+                  - entity: light.svetlo_garaz
+                    name: Garáž
+                  - entity: light.svetlo_vchod
+                    name: Vchod
+                  - entity: light.svetlo_vchod_bok
+                    name: Vchod boční
+                  - entity: light.svetlo_terasa
+                    name: Terasa
+                  - entity: light.svetlo_sklep
+                    name: Sklep
+                  - entity: light.svetlo_schodiste_sklep
+                    name: Schodiště sklep
+                  - entity: light.svetlo_kotelna
+                    name: Kotelna
+                  - entity: light.svetlo_komora
+                    name: Komora
+                  - entity: light.svetlo_chodba_patro
+                    name: Chodba patro
+                  - entity: light.svetlo_balkon
+                    name: Balkon
+                  - entity: light.zasuvka_venku
+                    name: Zásuvka venku
+                state_color: true
+      - type: grid
+        column_span: 2
+        cards:
+          - type: custom:bubble-card
+            card_type: horizontal-buttons-stack
+            auto_order: false
+            1_link: /muj-dum/domov
+            1_name: Domov
+            1_icon: mdi:home
+            2_link: /muj-dum/topeni
+            2_name: Klima
+            2_icon: mdi:heat-wave
+            3_link: /muj-dum/kamery
+            3_name: Kamery
+            3_icon: mdi:cctv
+            4_link: /muj-dum/nastaveni
+            4_name: Nastavení
+            4_icon: mdi:cog
+  - title: Režim klima
+    path: topeni
+    icon: mdi:heat-wave
+    type: sections
+    max_columns: 2
+    sections:
+      - type: grid
+        column_span: 1
+        cards:
+          - type: vertical-stack
+            card_mod:
+              style: |
+                :host {
+                  display: block;
+                  background: var(--mik-room-card-bg);
+                  backdrop-filter: blur(12px);
+                  -webkit-backdrop-filter: blur(12px);
+                  border: var(--mik-room-card-border);
+                  border-radius: var(--mik-room-card-radius);
+                  overflow: hidden;
+                  box-shadow: var(--mik-room-card-shadow);
+                }
+                #root {
+                  padding: var(--mik-room-card-padding);
+                }
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Obývák
+                icon: mdi:sofa
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_obyvak
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_obyvak
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_obyvak
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_obyvak
+                      plan: Ruční
+                      icon: mdi:hand-back-right
+                      color_on: rgba(234,235,238,0.97)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_obyvak
+                      plan: Vlastní
+                      icon: mdi:calendar-account
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_obyvak
+                      plan: Společný
+                      icon: mdi:calendar-multiple
+                      color_on: var(--mik-color-komfort)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_obyvak
+                      name: Vlastní
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_spolecny
+                      name: Společný
+      - type: grid
+        column_span: 1
+        cards:
+          - type: vertical-stack
+            card_mod:
+              style: |
+                :host {
+                  display: block;
+                  background: var(--mik-room-card-bg);
+                  backdrop-filter: blur(12px);
+                  -webkit-backdrop-filter: blur(12px);
+                  border: var(--mik-room-card-border);
+                  border-radius: var(--mik-room-card-radius);
+                  overflow: hidden;
+                  box-shadow: var(--mik-room-card-shadow);
+                }
+                #root {
+                  padding: var(--mik-room-card-padding);
+                }
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Dětský pokoj 1
+                icon: mdi:bed
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_dp1
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_dp1
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_dp1
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_dp1
+                      plan: Ruční
+                      icon: mdi:hand-back-right
+                      color_on: rgba(234,235,238,0.97)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_dp1
+                      plan: Vlastní
+                      icon: mdi:calendar-account
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_dp1
+                      plan: Společný
+                      icon: mdi:calendar-multiple
+                      color_on: var(--mik-color-komfort)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_dp1
+                      name: Vlastní
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_spolecny
+                      name: Společný
+      - type: grid
+        column_span: 1
+        cards:
+          - type: vertical-stack
+            card_mod:
+              style: |
+                :host {
+                  display: block;
+                  background: var(--mik-room-card-bg);
+                  backdrop-filter: blur(12px);
+                  -webkit-backdrop-filter: blur(12px);
+                  border: var(--mik-room-card-border);
+                  border-radius: var(--mik-room-card-radius);
+                  overflow: hidden;
+                  box-shadow: var(--mik-room-card-shadow);
+                }
+                #root {
+                  padding: var(--mik-room-card-padding);
+                }
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Dětský pokoj 2
+                icon: mdi:bed
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_dp2
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_dp2
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_dp2
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_dp2
+                      plan: Ruční
+                      icon: mdi:hand-back-right
+                      color_on: rgba(234,235,238,0.97)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_dp2
+                      plan: Vlastní
+                      icon: mdi:calendar-account
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_dp2
+                      plan: Společný
+                      icon: mdi:calendar-multiple
+                      color_on: var(--mik-color-komfort)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_dp2
+                      name: Vlastní
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_spolecny
+                      name: Společný
+      - type: grid
+        column_span: 1
+        cards:
+          - type: vertical-stack
+            card_mod:
+              style: |
+                :host {
+                  display: block;
+                  background: var(--mik-room-card-bg);
+                  backdrop-filter: blur(12px);
+                  -webkit-backdrop-filter: blur(12px);
+                  border: var(--mik-room-card-border);
+                  border-radius: var(--mik-room-card-radius);
+                  overflow: hidden;
+                  box-shadow: var(--mik-room-card-shadow);
+                }
+                #root {
+                  padding: var(--mik-room-card-padding);
+                }
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Ložnice
+                icon: mdi:bed-king
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_loznice
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_loznice
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_loznice
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_loznice
+                      plan: Ruční
+                      icon: mdi:hand-back-right
+                      color_on: rgba(234,235,238,0.97)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_loznice
+                      plan: Vlastní
+                      icon: mdi:calendar-account
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_loznice
+                      plan: Společný
+                      icon: mdi:calendar-multiple
+                      color_on: var(--mik-color-komfort)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_loznice
+                      name: Vlastní
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_spolecny
+                      name: Společný
+      - type: grid
+        column_span: 1
+        cards:
+          - type: vertical-stack
+            card_mod:
+              style: |
+                :host {
+                  display: block;
+                  background: var(--mik-room-card-bg);
+                  backdrop-filter: blur(12px);
+                  -webkit-backdrop-filter: blur(12px);
+                  border: var(--mik-room-card-border);
+                  border-radius: var(--mik-room-card-radius);
+                  overflow: hidden;
+                  box-shadow: var(--mik-room-card-shadow);
+                }
+                #root {
+                  padding: var(--mik-room-card-padding);
+                }
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Pracovna
+                icon: mdi:desk-lamp
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_pracovna
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_pracovna
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_pracovna
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_pracovna
+                      plan: Ruční
+                      icon: mdi:hand-back-right
+                      color_on: rgba(234,235,238,0.97)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_pracovna
+                      plan: Vlastní
+                      icon: mdi:calendar-account
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_pracovna
+                      plan: Společný
+                      icon: mdi:calendar-multiple
+                      color_on: var(--mik-color-komfort)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_pracovna
+                      name: Vlastní
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_spolecny
+                      name: Společný
+      - type: grid
+        column_span: 1
+        cards:
+          - type: vertical-stack
+            card_mod:
+              style: |
+                :host {
+                  display: block;
+                  background: var(--mik-room-card-bg);
+                  backdrop-filter: blur(12px);
+                  -webkit-backdrop-filter: blur(12px);
+                  border: var(--mik-room-card-border);
+                  border-radius: var(--mik-room-card-radius);
+                  overflow: hidden;
+                  box-shadow: var(--mik-room-card-shadow);
+                }
+                #root {
+                  padding: var(--mik-room-card-padding);
+                }
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Koupelna 2NP
+                icon: mdi:shower
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_komfort_koupelna_2np
+                      name: Komfort
+                      icon: mdi:home-account
+                      color_on: var(--mik-color-komfort)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_standby_koupelna_2np
+                      name: Standby
+                      icon: mdi:home-outline
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: topeni_mode_btn
+                    variables:
+                      entity: switch.topeni_noc_koupelna_2np
+                      name: Útlum
+                      icon: mdi:weather-night
+                      color_on: var(--mik-color-utlum)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_koupelna_2np
+                      plan: Ruční
+                      icon: mdi:hand-back-right
+                      color_on: rgba(234,235,238,0.97)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_koupelna_2np
+                      plan: Vlastní
+                      icon: mdi:calendar-account
+                      color_on: var(--mik-color-standby)
+                  - type: custom:button-card
+                    template: plan_btn
+                    variables:
+                      entity: input_select.topeni_plan_koupelna_2np
+                      plan: Společný
+                      icon: mdi:calendar-multiple
+                      color_on: var(--mik-color-komfort)
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_koupelna_2np
+                      name: Vlastní
+                  - type: custom:button-card
+                    template: schedule_link_btn
+                    variables:
+                      entity: schedule.topeni_spolecny
+                      name: Společný
+      - type: grid
+        column_span: 2
+        cards:
+          - type: custom:bubble-card
+            card_type: horizontal-buttons-stack
+            1_link: /muj-dum/domov
+            1_name: Domov
+            1_icon: mdi:home
+  - title: Kamery
+    path: kamery
+    icon: mdi:cctv
+    type: sections
+    max_columns: 2
+    sections:
+      - type: grid
+        column_span: 1
+        cards:
+          - camera_view: live
+            type: picture-glance
+            entities: []
+            camera_image: camera.kamera_01
+            aspect_ratio: "16:9"
+            title: Kamera 01
+      - type: grid
+        column_span: 1
+        cards:
+          - camera_view: live
+            type: picture-glance
+            entities: []
+            camera_image: camera.kamera_02
+            aspect_ratio: "16:9"
+            title: Kamera 02
+      - type: grid
+        column_span: 2
+        cards:
+          - type: custom:bubble-card
+            card_type: horizontal-buttons-stack
+            1_link: /muj-dum/domov
+            1_name: Domov
+            1_icon: mdi:home
+  - title: Nastavení
+    path: nastaveni
+    icon: mdi:cog
+    type: sections
+    max_columns: 1
+    sections:
+      - type: grid
+        cards:
+          - type: markdown
+            content: |
+              ## Nastavení
+          - type: custom:bubble-card
+            card_type: separator
+            name: Ventilace
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                template: ventilace_btn
+                variables:
+                  entity: switch.ventilace_sklep
+                  name: Sklep
+              - type: custom:button-card
+                template: ventilace_btn
+                variables:
+                  entity: switch.ventilace_koupelna_1np
+                  name: Koupelna 1NP
+          - type: entities
+            entities:
+              - entity: schedule.ventilace_sklep
+                name: Rozvrh - Sklep
+              - entity: schedule.ventilace_koupelna_1np
+                name: Rozvrh - Koupelna 1NP
+          - type: entities
+            title: Kontakty stav
+            entities:
+              - entity: binary_sensor.dvere_vstup
+                name: Dveře vstup
+              - entity: binary_sensor.vrata_garaz_kontakt
+                name: Vrata garáž
+              - entity: binary_sensor.okno_garaz
+                name: Okno garáž
+              - entity: binary_sensor.okno_obyvak
+                name: Okno obývák
+              - entity: binary_sensor.okno_kuchyn
+                name: Okno kuchyň
+              - entity: binary_sensor.okno_loznice
+                name: Okno ložnice
+              - entity: binary_sensor.okno_pracovna
+                name: Okno pracovna
+      - type: grid
+        cards:
+          - type: custom:bubble-card
+            card_type: horizontal-buttons-stack
+            1_link: /muj-dum/domov
+            1_name: Domov
+            1_icon: mdi:home

@@ -1,0 +1,395 @@
+# Rozvrhy topení a ventilace + plány per místnost
+# Nahrát do: /config/packages/heating_schedule.yaml
+#
+# POZNÁMKA: Schedule helpery jsou vytvořeny přes create_schedules.py (storage mode = UI-editovatelné)
+# NENASTAVOVAT je zde v YAML — YAML-definované schedule nelze editovat z UI!
+
+# ── INPUT_SELECT: výběr plánu per místnost ────────────────────────────────────
+
+input_select:
+
+  topeni_plan_obyvak:
+    name: "Plán topení - Obývák"
+    options: [Ruční, Vlastní, Společný]
+    initial: Ruční
+    icon: mdi:calendar-clock
+
+  topeni_plan_dp1:
+    name: "Plán topení - Dětský pokoj 1"
+    options: [Ruční, Vlastní, Společný]
+    initial: Ruční
+    icon: mdi:calendar-clock
+
+  topeni_plan_dp2:
+    name: "Plán topení - Dětský pokoj 2"
+    options: [Ruční, Vlastní, Společný]
+    initial: Ruční
+    icon: mdi:calendar-clock
+
+  topeni_plan_loznice:
+    name: "Plán topení - Ložnice"
+    options: [Ruční, Vlastní, Společný]
+    initial: Ruční
+    icon: mdi:calendar-clock
+
+  topeni_plan_pracovna:
+    name: "Plán topení - Pracovna"
+    options: [Ruční, Vlastní, Společný]
+    initial: Ruční
+    icon: mdi:calendar-clock
+
+  topeni_plan_koupelna_2np:
+    name: "Plán topení - Koupelna 2NP"
+    options: [Ruční, Vlastní, Společný]
+    initial: Ruční
+    icon: mdi:calendar-clock
+
+# ── AUTOMATIONS ───────────────────────────────────────────────────────────────
+
+automation:
+
+  # ── Rozvrh topení: schedule změna → nastavit režim (pokud plan odpovídá) ───
+
+  - id: topeni_schedule_obyvak
+    alias: "Topení rozvrh - Obývák"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: schedule.topeni_obyvak
+        id: vlastni
+      - platform: state
+        entity_id: schedule.topeni_spolecny
+        id: spolecny
+    condition:
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: vlastni
+              - condition: state
+                entity_id: input_select.topeni_plan_obyvak
+                state: "Vlastní"
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: spolecny
+              - condition: state
+                entity_id: input_select.topeni_plan_obyvak
+                state: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_obyvak
+        data:
+          option: "{{ 'Komfort' if trigger.to_state.state == 'on' else 'Útlum' }}"
+
+  - id: topeni_schedule_dp1
+    alias: "Topení rozvrh - Dětský pokoj 1"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: schedule.topeni_dp1
+        id: vlastni
+      - platform: state
+        entity_id: schedule.topeni_spolecny
+        id: spolecny
+    condition:
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: vlastni
+              - condition: state
+                entity_id: input_select.topeni_plan_dp1
+                state: "Vlastní"
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: spolecny
+              - condition: state
+                entity_id: input_select.topeni_plan_dp1
+                state: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_dp1
+        data:
+          option: "{{ 'Komfort' if trigger.to_state.state == 'on' else 'Útlum' }}"
+
+  - id: topeni_schedule_dp2
+    alias: "Topení rozvrh - Dětský pokoj 2"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: schedule.topeni_dp2
+        id: vlastni
+      - platform: state
+        entity_id: schedule.topeni_spolecny
+        id: spolecny
+    condition:
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: vlastni
+              - condition: state
+                entity_id: input_select.topeni_plan_dp2
+                state: "Vlastní"
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: spolecny
+              - condition: state
+                entity_id: input_select.topeni_plan_dp2
+                state: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_dp2
+        data:
+          option: "{{ 'Komfort' if trigger.to_state.state == 'on' else 'Útlum' }}"
+
+  - id: topeni_schedule_loznice
+    alias: "Topení rozvrh - Ložnice"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: schedule.topeni_loznice
+        id: vlastni
+      - platform: state
+        entity_id: schedule.topeni_spolecny
+        id: spolecny
+    condition:
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: vlastni
+              - condition: state
+                entity_id: input_select.topeni_plan_loznice
+                state: "Vlastní"
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: spolecny
+              - condition: state
+                entity_id: input_select.topeni_plan_loznice
+                state: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_loznice
+        data:
+          option: "{{ 'Komfort' if trigger.to_state.state == 'on' else 'Útlum' }}"
+
+  - id: topeni_schedule_pracovna
+    alias: "Topení rozvrh - Pracovna"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: schedule.topeni_pracovna
+        id: vlastni
+      - platform: state
+        entity_id: schedule.topeni_spolecny
+        id: spolecny
+    condition:
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: vlastni
+              - condition: state
+                entity_id: input_select.topeni_plan_pracovna
+                state: "Vlastní"
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: spolecny
+              - condition: state
+                entity_id: input_select.topeni_plan_pracovna
+                state: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_pracovna
+        data:
+          option: "{{ 'Komfort' if trigger.to_state.state == 'on' else 'Útlum' }}"
+
+  - id: topeni_schedule_koupelna_2np
+    alias: "Topení rozvrh - Koupelna 2NP"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: schedule.topeni_koupelna_2np
+        id: vlastni
+      - platform: state
+        entity_id: schedule.topeni_spolecny
+        id: spolecny
+    condition:
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: vlastni
+              - condition: state
+                entity_id: input_select.topeni_plan_koupelna_2np
+                state: "Vlastní"
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: spolecny
+              - condition: state
+                entity_id: input_select.topeni_plan_koupelna_2np
+                state: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_koupelna_2np
+        data:
+          option: "{{ 'Komfort' if trigger.to_state.state == 'on' else 'Útlum' }}"
+
+  # ── Změna plánu: okamžitě aplikovat aktuální stav rozvrhu ─────────────────
+
+  - id: topeni_plan_obyvak_changed
+    alias: "Topení plán změněn - Obývák"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_plan_obyvak
+        to: "Vlastní"
+      - platform: state
+        entity_id: input_select.topeni_plan_obyvak
+        to: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_obyvak
+        data:
+          option: >
+            {% set sched = 'schedule.topeni_obyvak' if trigger.to_state.state == 'Vlastní' else 'schedule.topeni_spolecny' %}
+            {{ 'Komfort' if is_state(sched, 'on') else 'Útlum' }}
+
+  - id: topeni_plan_dp1_changed
+    alias: "Topení plán změněn - Dětský pokoj 1"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_plan_dp1
+        to: "Vlastní"
+      - platform: state
+        entity_id: input_select.topeni_plan_dp1
+        to: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_dp1
+        data:
+          option: >
+            {% set sched = 'schedule.topeni_dp1' if trigger.to_state.state == 'Vlastní' else 'schedule.topeni_spolecny' %}
+            {{ 'Komfort' if is_state(sched, 'on') else 'Útlum' }}
+
+  - id: topeni_plan_dp2_changed
+    alias: "Topení plán změněn - Dětský pokoj 2"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_plan_dp2
+        to: "Vlastní"
+      - platform: state
+        entity_id: input_select.topeni_plan_dp2
+        to: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_dp2
+        data:
+          option: >
+            {% set sched = 'schedule.topeni_dp2' if trigger.to_state.state == 'Vlastní' else 'schedule.topeni_spolecny' %}
+            {{ 'Komfort' if is_state(sched, 'on') else 'Útlum' }}
+
+  - id: topeni_plan_loznice_changed
+    alias: "Topení plán změněn - Ložnice"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_plan_loznice
+        to: "Vlastní"
+      - platform: state
+        entity_id: input_select.topeni_plan_loznice
+        to: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_loznice
+        data:
+          option: >
+            {% set sched = 'schedule.topeni_loznice' if trigger.to_state.state == 'Vlastní' else 'schedule.topeni_spolecny' %}
+            {{ 'Komfort' if is_state(sched, 'on') else 'Útlum' }}
+
+  - id: topeni_plan_pracovna_changed
+    alias: "Topení plán změněn - Pracovna"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_plan_pracovna
+        to: "Vlastní"
+      - platform: state
+        entity_id: input_select.topeni_plan_pracovna
+        to: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_pracovna
+        data:
+          option: >
+            {% set sched = 'schedule.topeni_pracovna' if trigger.to_state.state == 'Vlastní' else 'schedule.topeni_spolecny' %}
+            {{ 'Komfort' if is_state(sched, 'on') else 'Útlum' }}
+
+  - id: topeni_plan_koupelna_2np_changed
+    alias: "Topení plán změněn - Koupelna 2NP"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: input_select.topeni_plan_koupelna_2np
+        to: "Vlastní"
+      - platform: state
+        entity_id: input_select.topeni_plan_koupelna_2np
+        to: "Společný"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.topeni_rezim_koupelna_2np
+        data:
+          option: >
+            {% set sched = 'schedule.topeni_koupelna_2np' if trigger.to_state.state == 'Vlastní' else 'schedule.topeni_spolecny' %}
+            {{ 'Komfort' if is_state(sched, 'on') else 'Útlum' }}
+
+  # ── Rozvrh ventilace ────────────────────────────────────────────────────────
+
+  - id: schedule_ventilace_sklep
+    alias: "Rozvrh ventilace - Sklep"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: schedule.ventilace_sklep
+    action:
+      - service: "{{ 'switch.turn_on' if trigger.to_state.state == 'on' else 'switch.turn_off' }}"
+        target:
+          entity_id: switch.ventilace_sklep
+
+  - id: schedule_ventilace_koupelna_1np
+    alias: "Rozvrh ventilace - Koupelna 1NP"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: schedule.ventilace_koupelna_1np
+    action:
+      - service: "{{ 'switch.turn_on' if trigger.to_state.state == 'on' else 'switch.turn_off' }}"
+        target:
+          entity_id: switch.ventilace_koupelna_1np
