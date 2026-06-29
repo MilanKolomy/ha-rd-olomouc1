@@ -9,6 +9,11 @@
 DB/
 KNX-Adresy/
 
+# Obrázky a návrhy (patří do .local)
+dashboard/*.png
+dashboard/*.jpg
+dashboard/*.jpeg
+
 # Tokeny a přihlašovací údaje
 .token-ha-api
 ssh-config
