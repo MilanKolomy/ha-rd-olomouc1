@@ -1,6 +1,14 @@
-# Kontext projektu — stav k 2026-06-24
+# Kontext projektu — stav k 2026-06-29
 
 ## Co bylo uděláno
+
+### Git & GitHub (2026-06-29)
+- Vytvořen `.gitignore` — ignoruje `.claude/`, `.local/`, `DB/`, `KNX-Adresy/`, `dashboard/*.png/jpg/jpeg`, tokeny
+- Inicializován git repozitář, initial commit
+- Repozitář na GitHub: https://github.com/MilanKolomy/ha-rd-olomouc1
+- `dashboard/Dashboard-návrh.png` odebrán z gitu (přesunut do `.local/`)
+- Vytvořen `README.md` s přehledem projektu, tabulkami KNX skupin, strukturou, deploy příkazy
+- Přidán screenshot dashboardu `themes/screenshot.jpg` — zobrazuje se v README na GitHubu
 
 ### Připojení na HA Green
 - Ověřeno připojení na Home Assistant Green
